@@ -1,0 +1,20 @@
+note over browser:
+user enters note and submits
+end note
+
+note over browser:
+even handler stops default form behaviour,
+re-renders page with new note
+and submits new note to server
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/notes
+
+note over server:
+server adds submitted note to note list
+end note
+
+server-->browser: Note created, Status 201
+note over browser:
+Console log: {"message":"note created"}
+end note
