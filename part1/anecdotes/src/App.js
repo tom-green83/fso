@@ -14,12 +14,18 @@ const App = () => {
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
 
-  const handleSelected = () => setSelected(Math.floor(Math.random()*anecdotes.length))
+  const handleSelected = () => {
+    let newSelected
+    do {
+      newSelected = Math.floor(Math.random()*anecdotes.length)
+    } while (newSelected == selected);
+    setSelected(newSelected)
+  }
+  
   const handleVotes = () => {
     // const newVotes = votes  // Copies the reference so setVotes(newVotes) doesn't register it as a state change
     const newVotes = {...votes}
     newVotes[selected]++
-    console.log(newVotes[selected])
     setVotes(newVotes)
   }
 
