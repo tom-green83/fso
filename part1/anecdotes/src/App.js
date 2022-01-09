@@ -21,23 +21,28 @@ const App = () => {
     } while (newSelected == selected);
     setSelected(newSelected)
   }
-  
+
   const handleVotes = () => {
     // const newVotes = votes  // Copies the reference so setVotes(newVotes) doesn't register it as a state change
+    // const newVotes = {...votes}  // Assigning an object to votes (initially defined as array) worked until mostVoted was called
     const newVotes = [...votes]
     newVotes[selected]++
     setVotes(newVotes)
   }
 
-
+  const mostVoted = () => votes.indexOf(Math.max(...votes))
+  
   return (
     <div>
-      {anecdotes[selected]}
+      <h1>Anecdote of the day</h1>
+      <div>{anecdotes[selected]}</div>
       <div>has {votes[selected]} votes</div>
       <div>
         <button onClick={handleVotes}>vote</button>
         <button onClick={handleSelected}>next anecdote</button>
-      </div>         
+      </div>
+      <h1>Anecdote with most votes</h1>
+      <div>{anecdotes[mostVoted()]}</div>       
     </div>
   )
 }
