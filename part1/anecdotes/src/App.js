@@ -24,7 +24,7 @@ const App = () => {
   
   const handleVotes = () => {
     // const newVotes = votes  // Copies the reference so setVotes(newVotes) doesn't register it as a state change
-    const newVotes = {...votes}
+    const newVotes = [...votes]
     newVotes[selected]++
     setVotes(newVotes)
   }
