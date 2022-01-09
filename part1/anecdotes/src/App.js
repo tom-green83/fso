@@ -12,12 +12,24 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
+
   const handleSelected = () => setSelected(Math.floor(Math.random()*anecdotes.length))
-  
+  const handleVotes = () => {
+    // const newVotes = votes  // Copies the reference so setVotes(newVotes) doesn't register it as a state change
+    const newVotes = {...votes}
+    newVotes[selected]++
+    console.log(newVotes[selected])
+    setVotes(newVotes)
+  }
+
+
   return (
     <div>
       {anecdotes[selected]}
+      <div>has {votes[selected]} votes</div>
       <div>
+        <button onClick={handleVotes}>vote</button>
         <button onClick={handleSelected}>next anecdote</button>
       </div>         
     </div>
