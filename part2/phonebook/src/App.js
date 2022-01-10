@@ -23,6 +23,7 @@ const App = () => {
     }
     else {
       setPersons(persons.concat({name: newName}))
+      setNewName('')
     }
   }
 
