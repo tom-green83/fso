@@ -30,7 +30,7 @@ const CountryInfo = ({ country }) => {
   )
 }
 
-const Results = ({ countries }) => {
+const Results = ({ countries, handleFilterChange}) => {
   if (countries.length > 10) {
     return (
       <>
@@ -44,16 +44,17 @@ const Results = ({ countries }) => {
   } else {
     return (
       countries.map(country => 
-        <CountryName country={country} key={country.name.common}/>
+        <CountryName country={country} key={country.name.common} handleFilterChange={handleFilterChange}/>
       )
     )
   }  
 }
 
-const CountryName = ({ country }) => {
+const CountryName = ({ country, handleFilterChange }) => {
   return (
     <div>
       {country.name.common}
+      <button value={country.name.common} onClick={handleFilterChange}>Show</button>
     </div>
   )
 }
@@ -95,7 +96,7 @@ const App = () => {
   return (
     <>
       <SearchBox handleFilterChange={handleFilterChange} />
-      <Results countries={filterCountries()} />
+      <Results countries={filterCountries()} handleFilterChange={handleFilterChange} />
     </>
   )
 }
