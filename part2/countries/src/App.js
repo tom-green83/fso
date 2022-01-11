@@ -1,6 +1,40 @@
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 
+const CapitalWeather = ({ capital }) => {
+  const [weather, setWeather] = useState({})
+  const apiKey = process.env.REACT_APP_API_KEY
+  const apiURL = `http://api.openweathermap.org/data/2.5/weather?q=${capital}&appid=${apiKey}&units=metric`
+  useEffect(() => {
+    axios.
+    get(apiURL).
+    then(response => {
+      setWeather(response.data)
+    })
+  }, [])
+  
+  if (Object.keys(weather).length){
+    const iconURL =`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`
+      return (
+        <div>
+          <h2>Weather in {capital}</h2>
+          <strong>temperature: </strong>{Math.round(weather.main.temp)} Celsius
+          <div>
+            <img src={iconURL}/>
+          </div>
+          <strong>wind: </strong> {weather.wind.speed} metres per second, {weather.wind.deg} degrees
+          
+        </div>   
+      )}
+  else {
+    return (
+    <div>
+      Weather API unavailable
+    </div>
+    )
+  }  
+}
+
 const CountryInfo = ({ country }) => {
 
   // Function to render languages for a country
@@ -26,6 +60,7 @@ const CountryInfo = ({ country }) => {
       <h2>Spoken languages</h2>
       {Languages(country.languages)}
       <img src={country.flags.png} alt={"Flag of " + country.name.common} />
+      <CapitalWeather capital={country.capital} />
     </>
   )
 }
@@ -70,6 +105,7 @@ const SearchBox = ({ handleFilterChange }) => {
 const App = () => {
   const [countries, setCountries] = useState([])
   const [filter, setFilter] = useState('')
+
 
   // Get data from server
   useEffect(() => {
