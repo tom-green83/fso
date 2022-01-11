@@ -20,7 +20,7 @@ const CapitalWeather = ({ capital }) => {
           <h2>Weather in {capital}</h2>
           <strong>temperature: </strong>{Math.round(weather.main.temp)} Celsius
           <div>
-            <img src={iconURL}/>
+            <img src={iconURL} alt={"image of " + weather.weather[0].description}/>
           </div>
           <strong>wind: </strong> {weather.wind.speed} metres per second, {weather.wind.deg} degrees
           
@@ -72,7 +72,7 @@ const Results = ({ countries, handleFilterChange}) => {
         <p>Too many matches, specify another filter</p>
       </>
     )
-  } else if (countries.length == 1){
+  } else if (countries.length === 1){
     return (
       <CountryInfo country={countries[0]} />
     )
