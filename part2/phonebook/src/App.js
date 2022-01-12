@@ -1,6 +1,5 @@
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
-import { act } from 'react-dom/cjs/react-dom-test-utils.development'
 import phonebookService from './services/phonebook'
 
 const Person = ({ person, deletePerson }) => {
