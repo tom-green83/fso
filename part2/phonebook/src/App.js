@@ -2,6 +2,20 @@ import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import phonebookService from './services/phonebook'
 
+const Notification = ({ notification }) => {
+  const notificationText = notification.notificationText
+  const notificationClass = notification.notificationClass
+  if (notificationText === null) {    
+    return null
+  }
+
+  return (
+    <div className={notificationClass}>
+      {notificationText}
+    </div>
+  )
+}
+
 const Person = ({ person, deletePerson }) => {
   const handleDeleteClicked = () => {
     const confirmDelete = window.confirm(`Delete ${person.name}?`);
@@ -55,6 +69,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [persons, setPersons] = useState([])
+  const [notification, setNotification] = useState({})
+  const notificationDuration = 5000
 
   // Get data from json-server
   useEffect(() => {
@@ -65,12 +81,20 @@ const App = () => {
     })
   }, [])
   
+  // Adjust notification box
+  const adjustNotification = (notificationObject) => {
+    setNotification(notificationObject)
+    setTimeout(() => {
+      setNotification({})
+      }, notificationDuration)
+  }
+
   // Add person to phonebook
   const addName = (event) => {
     event.preventDefault()
     const nameExists = persons.find((person) => person.name === newName)
     const numberExists = persons.find((person) => person.number === newNumber)
-    const newPerson = {name: newName, number: newNumber}
+    const newPerson = {name: newName, number: newNumber}    
 
     if (nameExists) {
       if (numberExists) {
@@ -80,10 +104,17 @@ const App = () => {
         phonebookService
         .update(nameExists.id, newPerson)
         .then(response => {
-          setPersons(persons.map(person => person.id !== nameExists.id ? person : response))
+          adjustNotification({notificationText: `${newPerson.name}'s number updated`, notificationClass: 'success'})
+          setPersons(persons.map(person => person.id !== nameExists.id ? person : response))          
           setNewName('')
           setNewNumber('')
         })
+        .catch(error => {
+          adjustNotification({notificationText: `Information of ${newPerson.name} has already been removed from the server`, notificationClass: 'error'})
+          setPersons(persons.filter(person => person.id !== nameExists.id))          
+          setNewName('')
+          setNewNumber('')
+        })        
       }        
     }
     else {      
@@ -91,8 +122,9 @@ const App = () => {
         .create(newPerson)
         .then(newPerson => {
           setPersons(persons.concat(newPerson))
+          adjustNotification({notificationText: `Added ${newPerson.name}`, notificationClass: 'success'})
           setNewName('')
-          setNewNumber('')
+          setNewNumber('')          
         })
     }
   }
@@ -128,6 +160,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification notification={notification}/>
       <h2>Phonebook</h2>
       <Filter handleFilterChange={handleFilterChange} />
       <h3>add a new</h3>
