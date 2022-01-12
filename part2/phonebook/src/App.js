@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
+import phonebookService from './services/phonebook'
 
 const Person = ({ person }) => {
   return (
@@ -49,13 +50,14 @@ const App = () => {
 
   // Get data from json-server
   useEffect(() => {
-    axios.
-      get('http://localhost:3001/persons').
-      then(response => {
-        setPersons(response.data)
-      })
-    }, [])
+    phonebookService
+    .getAll()
+    .then(initialPersons =>{
+      setPersons(initialPersons)
+    })
+  }, [])
   
+  // Add person to phonebook
   const addName = (event) => {
     event.preventDefault()
     const nameExists = persons.find((person) => person.name === newName)
@@ -64,10 +66,10 @@ const App = () => {
     }
     else {
       const newPerson = {name: newName, number: newNumber}
-      axios.
-        post('http://localhost:3001/persons', newPerson).
-        then(response => {
-          setPersons(persons.concat(response.data))
+      phonebookService
+        .create(newPerson)
+        .then(newPerson => {
+          setPersons(persons.concat(newPerson))
           setNewName('')
           setNewNumber('')
         })
