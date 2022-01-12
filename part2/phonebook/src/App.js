@@ -1,11 +1,20 @@
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
+import { act } from 'react-dom/cjs/react-dom-test-utils.development'
 import phonebookService from './services/phonebook'
 
-const Person = ({ person }) => {
+const Person = ({ person, deletePerson }) => {
+  const handleDeleteClicked = () => {
+    const confirmDelete = window.confirm(`Delete ${person.name}?`);
+    if (confirmDelete) {
+      deletePerson()
+    } 
+  }
+
   return (
     <div>
       {person.name} {person.number}
+      <button onClick={handleDeleteClicked}>delete</button>
     </div>
   )
 }
@@ -34,10 +43,10 @@ const PersonForm = ({ addName, newName, handleNameChange, newNumber, handleNumbe
   )
 }
 
-const Persons = ({ persons }) => {
+const Persons = ({ persons , deletePersonWithId }) => {
   return (
     persons.map(person =>
-      <Person person={person} key={person.id} />
+      <Person person={person} key={person.id} deletePerson={() => deletePersonWithId(person.id)}/>
     )
   )
 }
@@ -76,6 +85,15 @@ const App = () => {
     }
   }
 
+  // Even handler to delete person
+  const deletePersonWithId = (id) => {
+    phonebookService
+      .deletePerson(id)
+      .then(() => {
+        setPersons(persons.filter(person => person.id !== id))
+      })
+  }
+
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
@@ -103,7 +121,7 @@ const App = () => {
       <h3>add a new</h3>
       <PersonForm addName={addName} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange} />
       <h3>Numbers</h3>
-      <Persons persons={filterPersons()} />
+      <Persons persons={filterPersons()} deletePersonWithId={deletePersonWithId} />
     </div>
   )
 }
