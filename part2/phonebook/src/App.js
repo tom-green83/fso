@@ -50,11 +50,11 @@ const App = () => {
   // Get data from json-server
   useEffect(() => {
     axios.
-    get('http://localhost:3001/persons').
-    then(response => {
-      setPersons(response.data)
-    })
-  }, [])
+      get('http://localhost:3001/persons').
+      then(response => {
+        setPersons(response.data)
+      })
+    }, [])
   
   const addName = (event) => {
     event.preventDefault()
@@ -63,9 +63,14 @@ const App = () => {
       alert(`${newName} is already added to phonebook`)
     }
     else {
-      setPersons(persons.concat({ name: newName, number: newNumber, id: persons.length + 1 }))
-      setNewName('')
-      setNewNumber('')
+      const newPerson = {name: newName, number: newNumber}
+      axios.
+        post('http://localhost:3001/persons', newPerson).
+        then(response => {
+          setPersons(persons.concat(response.data))
+          setNewName('')
+          setNewNumber('')
+        })
     }
   }
 
