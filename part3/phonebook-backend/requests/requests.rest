@@ -1,0 +1,49 @@
+### Get persons
+GET http://localhost:3001/api/persons HTTP/1.1
+
+### Delete person
+DELETE http://localhost:3001/api/persons/ HTTP/1.1
+
+### Update person
+PUT http://localhost:3001/api/persons/61e045b24ad94054c20b1c63 HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Person",
+    "number": "123"
+}
+
+### Add person
+POST http://localhost:3001/api/persons/ HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Person",
+    "number": "12345678"
+}
+
+### Add a person with no name
+POST http://localhost:3001/api/persons/ HTTP/1.1
+content-type: application/json
+
+{
+    "number": "123"
+}
+
+### Add a person with no number
+POST http://localhost:3001/api/persons/ HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Person"
+}
+
+### Add an already existing person
+POST http://localhost:3001/api/persons/ HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Arto Hellas", 
+    "number": "040-123456"
+}
+    
