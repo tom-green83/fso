@@ -100,21 +100,22 @@ const App = () => {
       if (numberExists) {
         alert(`${newName} is already added to phonebook`)        
       } else {
-        const updateConfirmation = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
-        phonebookService
-        .update(nameExists.id, newPerson)
-        .then(response => {
-          adjustNotification({notificationText: `${newPerson.name}'s number updated`, notificationClass: 'success'})
-          setPersons(persons.map(person => person.id !== nameExists.id ? person : response))          
-          setNewName('')
-          setNewNumber('')
-        })
-        .catch(error => {
-          adjustNotification({notificationText: `Information of ${newPerson.name} has already been removed from the server`, notificationClass: 'error'})
-          setPersons(persons.filter(person => person.id !== nameExists.id))          
-          setNewName('')
-          setNewNumber('')
-        })        
+        if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+          phonebookService
+          .update(nameExists.id, newPerson)
+          .then(response => {
+            adjustNotification({notificationText: `${newPerson.name}'s number updated`, notificationClass: 'success'})
+            setPersons(persons.map(person => person.id !== nameExists.id ? person : response))          
+            setNewName('')
+            setNewNumber('')
+          })
+          .catch(error => {
+            adjustNotification({notificationText: `Information of ${newPerson.name} has already been removed from the server`, notificationClass: 'error'})
+            setPersons(persons.filter(person => person.id !== nameExists.id))          
+            setNewName('')
+            setNewNumber('')
+          })
+        }        
       }        
     }
     else {      
