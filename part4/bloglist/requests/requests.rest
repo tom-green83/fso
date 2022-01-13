@@ -1,0 +1,13 @@
+### Get blogs
+GET http://localhost:3003/api/blogs HTTP/1.1
+
+### Add blog
+POST http://localhost:3003/api/blogs/ HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Blog",
+    "author": "Blogger",
+    "url": "blogger.com",
+    "likes": 10
+}
