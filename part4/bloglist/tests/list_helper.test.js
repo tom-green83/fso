@@ -30,7 +30,7 @@ describe('favourite blog', () => {
     expect(result).toEqual({})
   })
 
-  test('of a list has only one blog is found correctly', () => {
+  test('of a list that has only one blog is found correctly', () => {
     const favourite = {
       title: 'Go To Statement Considered Harmful',
       author: 'Edsger W. Dijkstra',
@@ -40,7 +40,7 @@ describe('favourite blog', () => {
     expect(result).toEqual(favourite)
   })
 
-  test('of a list has 5 blogs is found correctly', () => {    
+  test('of a list that has 5 blogs is found correctly', () => {    
     const favourite = {
       title: 'Canonical string reduction',
       author: 'Edsger W. Dijkstra',
@@ -49,6 +49,22 @@ describe('favourite blog', () => {
     const result = listHelper.favouriteBlog(blogs)
     expect(result).toEqual(favourite)
   })
+})
+
+describe('blogger with most blogs', () => {
+  test('in a list with 0 blogs', () => {
+    const result = listHelper.mostBlogs([])
+    expect(result).toEqual({})  
+  })  
+
+  test('in a list with 5 blogs', () => {
+    const mostBlogger = {
+      author: 'Robert C. Martin',
+      blogs: 3
+    }
+    const result = listHelper.mostBlogs(blogs)
+    expect(result).toEqual(mostBlogger)  
+  })  
 })
 
 // Test data
