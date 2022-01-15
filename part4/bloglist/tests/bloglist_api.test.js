@@ -37,9 +37,9 @@ test('every blog on database has an id', async () => {
 
 describe('post request to /api/blogs', () => {  
   test('returns the blog posted', async () => {
-    const response = (await api.post('/api/blogs').send(helper.newBlog)).body
-    delete response.id  // Remove id field which doesn't exist in post request
-    expect(response).toEqual(helper.newBlog)
+    const blog = (await api.post('/api/blogs').send(helper.newBlog)).body
+    delete blog.id  // Remove id field which doesn't exist in post request
+    expect(blog).toEqual(helper.newBlog)
   })
 
   test('increases blog count by 1', async () => {
@@ -50,8 +50,13 @@ describe('post request to /api/blogs', () => {
 })
 
 test('post with no likes information defaults to 0 likes', async () => {
-  const response = (await api.post('/api/blogs').send(helper.blogWithNoLikesInfo)).body
-  expect(response.likes).toEqual(0)
+  const blog = (await api.post('/api/blogs').send(helper.blogWithNoLikesInfo)).body
+  expect(blog.likes).toEqual(0)
+})
+
+test('post with no title  and url missing is reponded with status code 400', async () => {
+  const response = (await api.post('/api/blogs').send(helper.blogWithoutTitleAndUrl))
+  expect(response.status).toEqual(400)
 })
 
 afterAll(() => {

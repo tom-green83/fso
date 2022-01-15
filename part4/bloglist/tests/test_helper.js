@@ -62,5 +62,10 @@ const blogWithNoLikesInfo = {
   'url': 'blogger.com',
 }
 
+const blogWithoutTitleAndUrl = {
+  'author': 'Blogger',
+  'likes': 10
+}
 
-module.exports = {initialBlogs, newBlog, blogWithNoLikesInfo} 
+
+module.exports = {initialBlogs, newBlog, blogWithNoLikesInfo, blogWithoutTitleAndUrl} 
