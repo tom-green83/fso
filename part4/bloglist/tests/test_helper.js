@@ -56,4 +56,11 @@ const newBlog = {
   'likes': 10
 }
 
-module.exports = {initialBlogs, newBlog} 
+const blogWithNoLikesInfo = {
+  'title': 'Blog',
+  'author': 'Blogger',
+  'url': 'blogger.com',
+}
+
+
+module.exports = {initialBlogs, newBlog, blogWithNoLikesInfo} 

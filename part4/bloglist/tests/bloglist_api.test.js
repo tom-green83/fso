@@ -49,6 +49,11 @@ describe('post request to /api/blogs', () => {
   })
 })
 
+test('post with no likes information defaults to 0 likes', async () => {
+  const response = (await api.post('/api/blogs').send(helper.blogWithNoLikesInfo)).body
+  expect(response.likes).toEqual(0)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test jest --verbose --runInBand -- tests/bloglist_api.test.js",
+    "test": "NODE_ENV=test jest --verbose --runInBand -t 'no likes'",
     "dev": "NODE_ENV=development nodemon index.js",
     "start": "NODE_ENV=production node index.js",
     "lint": "eslint ."
