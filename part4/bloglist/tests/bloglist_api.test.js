@@ -49,22 +49,35 @@ describe('post request to /api/blogs', () => {
   })
 })
 
-test('post with no likes information defaults to 0 likes', async () => {
-  const blog = (await api.post('/api/blogs').send(helper.blogWithNoLikesInfo)).body
-  expect(blog.likes).toEqual(0)
+describe('post request with no likes information', () => {  
+  test('defaults to 0 likes', async () => {
+    const blog = (await api.post('/api/blogs').send(helper.blogWithNoLikesInfo)).body
+    expect(blog.likes).toEqual(0)
+  })
 })
 
-test('post with no title  and url missing is reponded with status code 400', async () => {
-  const response = await api.post('/api/blogs').send(helper.blogWithoutTitleAndUrl)
-  expect(response.status).toEqual(400)
+describe('post request without title and url', () => {  
+  test('is reponded with status code 400', async () => {
+    const response = await api.post('/api/blogs').send(helper.blogWithoutTitleAndUrl)
+    expect(response.status).toEqual(400)
+  })
 })
 
-test('deleting a blog', async () => {
-  await api.delete(`/api/blogs/${helper.blogToDelete._id}`)
-  const blogs = (await api.get('/api/blogs')).body
-  expect(blogs).toHaveLength(helper.initialBlogs.length - 1)
-  const ids = blogs.map(blog => blog.id)  
-  expect(ids).not.toContain(helper.blogToDelete.id)
+describe('delete request', () => {  
+  test('results in removal of blog', async () => {
+    await api.delete(`/api/blogs/${helper.blogToDelete._id}`)
+    const blogs = (await api.get('/api/blogs')).body
+    expect(blogs).toHaveLength(helper.initialBlogs.length - 1)
+    const ids = blogs.map(blog => blog.id)  
+    expect(ids).not.toContain(helper.blogToDelete.id)
+  })
+})
+
+describe('put request', () => {
+  test('results in blog being updated', async () => {
+    const updatedBlog = (await api.put(`/api/blogs/${helper.blogToUpdate._id}`).send(helper.blogToUpdate)).body
+    expect(updatedBlog.likes).toEqual(helper.blogToUpdate.likes)
+  })
 })
 
 afterAll(() => {

@@ -76,5 +76,13 @@ const blogToDelete = {
   __v: 0
 }
 
+const blogToUpdate = {
+  _id: '5a422aa71b54a676234d17f8',
+  title: 'Go To Statement Considered Harmful',
+  author: 'Edsger W. Dijkstra',
+  url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+  likes: 10,
+  __v: 0
+}
 
-module.exports = {initialBlogs, newBlog, blogWithNoLikesInfo, blogWithoutTitleAndUrl, blogToDelete} 
+module.exports = {initialBlogs, newBlog, blogWithNoLikesInfo, blogWithoutTitleAndUrl, blogToDelete, blogToUpdate} 
