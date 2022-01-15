@@ -55,8 +55,16 @@ test('post with no likes information defaults to 0 likes', async () => {
 })
 
 test('post with no title  and url missing is reponded with status code 400', async () => {
-  const response = (await api.post('/api/blogs').send(helper.blogWithoutTitleAndUrl))
+  const response = await api.post('/api/blogs').send(helper.blogWithoutTitleAndUrl)
   expect(response.status).toEqual(400)
+})
+
+test('deleting a blog', async () => {
+  await api.delete(`/api/blogs/${helper.blogToDelete._id}`)
+  const blogs = (await api.get('/api/blogs')).body
+  expect(blogs).toHaveLength(helper.initialBlogs.length - 1)
+  const ids = blogs.map(blog => blog.id)  
+  expect(ids).not.toContain(helper.blogToDelete.id)
 })
 
 afterAll(() => {
