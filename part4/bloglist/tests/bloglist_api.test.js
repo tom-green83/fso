@@ -27,6 +27,28 @@ describe('get request to /api/blogs', () => {
   })
 })
 
+test('every blog on database has an id', async () => {
+  const blogs = (await api.get('/api/blogs')).body
+  const promiseArray = blogs.map(blog => {
+    expect(blog.id).toBeDefined()
+  })
+  await Promise.all(promiseArray)
+})
+
+describe('post request to /api/blogs', () => {  
+  test('returns the blog posted', async () => {
+    const response = (await api.post('/api/blogs').send(helper.newBlog)).body
+    delete response.id  // Remove id field which doesn't exist in post request
+    expect(response).toEqual(helper.newBlog)
+  })
+
+  test('increases blog count by 1', async () => {
+    await api.post('/api/blogs').send(helper.newBlog)
+    const blogs = (await api.get('/api/blogs')).body
+    expect(blogs).toHaveLength(helper.initialBlogs.length +1 )
+  })
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })

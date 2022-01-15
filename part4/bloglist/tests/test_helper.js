@@ -49,4 +49,11 @@ const initialBlogs = [
   }  
 ]
 
-module.exports = {initialBlogs} 
+const newBlog = {
+  'title': 'Blog',
+  'author': 'Blogger',
+  'url': 'blogger.com',
+  'likes': 10
+}
+
+module.exports = {initialBlogs, newBlog} 
