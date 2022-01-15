@@ -58,14 +58,31 @@ describe('blogger with most blogs', () => {
   })  
 
   test('in a list with 5 blogs', () => {
-    const mostBlogger = {
+    const mostBlogs = {
       author: 'Robert C. Martin',
       blogs: 3
     }
     const result = listHelper.mostBlogs(blogs)
-    expect(result).toEqual(mostBlogger)  
+    expect(result).toEqual(mostBlogs)  
   })  
 })
+
+describe('blogger with most likes', () => {
+  test('in a list with 0 blogs', () => {
+    const result = listHelper.mostLikes([])
+    expect(result).toEqual({})  
+  })
+  
+  test('in a list with 5 blogs', () => {
+    const result = listHelper.mostLikes(blogs)
+    const mostLikes = {
+      author: 'Edsger W. Dijkstra',
+      likes: 17
+    }
+    expect(result).toEqual(mostLikes)
+  })
+})
+
 
 // Test data
 const listWithOneBlog = [
