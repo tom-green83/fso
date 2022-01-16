@@ -65,3 +65,7 @@ content-type: application/json
     "username": "Username3",
     "password": "password3"
   }
+
+### Request deletion of blog as Username2
+DELETE http://localhost:3003/api/blogs/61e410c1c9c5c891d406e518 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZXJuYW1lMiIsImlkIjoiNjFlNDA5YzJjNTNmNDk1YjZjNzRjMzVhIiwiaWF0IjoxNjQyMzM0Njc0fQ.WI7VJOTtI4iL1BMClo4rbBilKKLNi-P8ijXBs0Rbxg0
