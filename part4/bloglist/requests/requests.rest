@@ -66,6 +66,10 @@ content-type: application/json
     "password": "password3"
   }
 
-### Request deletion of blog as Username2
-DELETE http://localhost:3003/api/blogs/61e410c1c9c5c891d406e518 HTTP/1.1
+### Request deletion of Username2's blog blog as Username2
+DELETE http://localhost:3003/api/blogs/61e42afa958fe7b73c2e0036 HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZXJuYW1lMiIsImlkIjoiNjFlNDA5YzJjNTNmNDk1YjZjNzRjMzVhIiwiaWF0IjoxNjQyMzM0Njc0fQ.WI7VJOTtI4iL1BMClo4rbBilKKLNi-P8ijXBs0Rbxg0
+
+### Request deletion of Username2's blog blog as Username3
+DELETE http://localhost:3003/api/blogs/61e42afa958fe7b73c2e0036 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZXJuYW1lMyIsImlkIjoiNjFlNDA5YzRjNTNmNDk1YjZjNzRjMzVjIiwiaWF0IjoxNjQyMzM0NjkxfQ.hn138bGFIQUogHtlUIk5XEn0ne96ykMwYp5E468IfVg
