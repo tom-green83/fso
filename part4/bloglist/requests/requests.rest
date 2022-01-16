@@ -22,3 +22,12 @@ content-type: application/json
     "password": "password2",
     "blogs:": []
   }
+
+### Login as Username2
+POST http://localhost:3003/api/login/ HTTP/1.1
+content-type: application/json
+
+  {
+    "username": "Username2",
+    "password": "password2"
+  }
