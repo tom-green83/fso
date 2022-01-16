@@ -4,6 +4,8 @@ const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 const User = require('../models/user')
+const { shortPassword } = require('./users_api_helper')
+const { shortUsername } = require('./users_api_helper')
 const helper = require('./users_api_helper')
 
 beforeEach (async () => {
@@ -26,6 +28,19 @@ describe('adding a user', () => {
     const savedUser = (await api.post('/api/users').send(userToAdd)).body
     expect(savedUser.username).toEqual(userToAdd.username)
     expect(savedUser.name).toEqual(userToAdd.name)
+  })
+
+  test('with a username shorter than 3 characters fails', async () => {
+    const result = await api.post('/api/users').send(shortUsername)
+    expect(result.status).toEqual(400)
+    expect(result.body.error).toEqual('username must be at least 3 characters long')
+
+  })
+
+  test('with a password shorter than 3 characters fails', async () => {
+    const result = await api.post('/api/users').send(shortPassword)
+    expect(result.status).toEqual(400)
+    expect(result.body.error).toEqual('password must be at least 3 characters long')
   })
 })
 

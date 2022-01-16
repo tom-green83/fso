@@ -17,4 +17,16 @@ const userToAdd = {
   'password': 'password3'
 }
 
-module.exports = { initialUsers, userToAdd }
+const shortUsername = {
+  'username': 'U4',
+  'name': 'Name4',
+  'password': 'password4'
+}
+
+const shortPassword = {
+  'username': 'Username5',
+  'name': 'Name5',
+  'password': 'p5'
+}
+
+module.exports = { initialUsers, userToAdd, shortUsername, shortPassword }
