@@ -13,6 +13,13 @@ beforeEach (async () => {
   await Promise.all(promiseArray)
 })
 
+describe ('get request to /api/users', () => {
+  test('returns correct number of users', async () => {
+    const returnedUsers = (await api.get('/api/users')).body
+    expect(returnedUsers).toHaveLength(helper.initialUsers.length)
+  })
+})
+
 describe('adding a user', () => {
   test('returns added user', async () => {
     const userToAdd = helper.userToAdd
