@@ -3,9 +3,18 @@ const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const helper = require('./test_helper')
+const usersHelper = require('./users_api_helper')
 
 // Initialise remote DB
+beforeAll (async () => {
+  await User.deleteMany({})
+  const userObjects = usersHelper.initialUsers.map(initialUser => new User(initialUser))
+  const promiseArray = userObjects.map(userObject => userObject.save())
+  await Promise.all(promiseArray)
+})
+
 beforeEach (async () => {
   await Blog.deleteMany({})
   const blogObjects = helper.initialBlogs.map(initialBlog => new Blog(initialBlog))
@@ -39,7 +48,7 @@ describe('post request to /api/blogs', () => {
   test('returns the blog posted', async () => {
     const blog = (await api.post('/api/blogs').send(helper.newBlog)).body
     delete blog.id  // Remove id field which doesn't exist in post request
-    expect(blog).toEqual(helper.newBlog)
+    expect(blog.title).toEqual(helper.newBlog.title)
   })
 
   test('increases blog count by 1', async () => {
