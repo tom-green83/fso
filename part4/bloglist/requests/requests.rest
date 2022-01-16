@@ -2,32 +2,66 @@
 GET http://localhost:3003/api/blogs HTTP/1.1
 
 ### Add blog
+### As Username2
 POST http://localhost:3003/api/blogs/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZXJuYW1lMiIsImlkIjoiNjFlNDA5YzJjNTNmNDk1YjZjNzRjMzVhIiwiaWF0IjoxNjQyMzM0Njc0fQ.WI7VJOTtI4iL1BMClo4rbBilKKLNi-P8ijXBs0Rbxg0
 content-type: application/json
 
 {
     "title": "Blog",
-    "author": "Blogger",
+    "author": "Username2",
+    "url": "blogger.com",
+    "likes": 10
+}
+
+### As Username3
+POST http://localhost:3003/api/blogs/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZXJuYW1lMyIsImlkIjoiNjFlNDA5YzRjNTNmNDk1YjZjNzRjMzVjIiwiaWF0IjoxNjQyMzM0NjkxfQ.hn138bGFIQUogHtlUIk5XEn0ne96ykMwYp5E468IfVg
+content-type: application/json
+
+{
+    "title": "Blog",
+    "author": "Username3",
     "url": "blogger.com",
     "likes": 10
 }
 
 ### Add a user
+### Username2
 POST http://localhost:3003/api/users/ HTTP/1.1
 content-type: application/json
 
   {
     "username": "Username2",
     "name": "Name2",
-    "password": "password2",
-    "blogs:": []
+    "password": "password2"
   }
 
-### Login as Username2
+### Username3
+POST http://localhost:3003/api/users/ HTTP/1.1
+content-type: application/json
+
+  {
+    "username": "Username3",
+    "name": "Name3",
+    "password": "password3"
+  }
+
+### Login 
+###As Username2
 POST http://localhost:3003/api/login/ HTTP/1.1
 content-type: application/json
 
   {
     "username": "Username2",
     "password": "password2"
+  }
+
+###As Username3
+POST http://localhost:3003/api/login/ HTTP/1.1
+content-type: application/json
+
+  {
+    "username": "Username3",
+    "password": "password3"
   }
