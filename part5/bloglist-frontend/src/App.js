@@ -5,8 +5,9 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [newBlog, setNewBlog] = useState('')
-  const [showAll, setShowAll] = useState(true)
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('') 
@@ -23,7 +24,7 @@ const App = () => {
     if (loggedInUserJSON) {
       const user = JSON.parse(loggedInUserJSON)
       setUser(user)
-      blogService.setToken(user)
+      blogService.setToken(user.token)
     }
   }, [])
 
@@ -46,10 +47,28 @@ const App = () => {
     }
   }
 
-  const handleLogout = async (event) => {
+  const handleLogout = () => {
     console.log('logging out')
     window.localStorage.removeItem('loggedInBlogUser')
     setUser(null)
+  }
+
+  const handleSubmitNewBlog = event => {
+    event.preventDefault()
+    console.log('posting new blog as', username)
+    const newObject = {
+      title: title,
+      author: author,
+      url: url
+    }
+    blogService
+      .create(newObject)
+        .then(returnedObject => {
+        setBlogs(blogs.concat(returnedObject))
+        setTitle('')
+        setAuthor('')
+        setUrl('')
+    })
   }
 
   const loginForm = () => (
@@ -66,15 +85,34 @@ const App = () => {
       </form>
     </div>
   )
-
+  
   const blogForm = () => (
     <div>
       <h2>blogs</h2>
-      <p>{user.name} logged in<button onClick={handleLogout}>logout</button></p>      
+      <p>{user.name} logged in<button onClick={handleLogout}>logout</button></p>
+      {createBlogForm()}      
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog}/>
       )}
     </div>
+  )
+  
+  const createBlogForm = () => (
+    <>
+      <h2>create new</h2>
+      <form onSubmit={handleSubmitNewBlog}>
+        <div>
+          title:<input type='text' value={title} name='Title' onChange={({target}) => setTitle(target.value)}/>
+        </div>
+        <div>
+          author:<input type='text' value={author} name='Author' onChange={({target}) => setAuthor(target.value)}/>
+        </div>
+        <div>
+          url:<input type='text' value={url} name='Url' onChange={({target}) => setUrl(target.value)}/>
+        </div>
+        <button type='submit'>create</button>
+      </form>
+    </>    
   )
 
   return(
