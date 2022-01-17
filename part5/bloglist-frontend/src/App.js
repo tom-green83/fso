@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -9,6 +10,7 @@ const App = () => {
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setsuccessMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
@@ -68,12 +70,17 @@ const App = () => {
         setTitle('')
         setAuthor('')
         setUrl('')
+        setsuccessMessage(`a new blog ${returnedObject.title} by ${returnedObject.author} added`)
+        setTimeout(() => {
+        setsuccessMessage(null)
+      }, 5000)
     })
   }
 
   const loginForm = () => (
     <div>
-      <h2>login to application</h2>      
+      <h2>login to application</h2>
+      <Notification message={errorMessage} notificationType='error' />
       <form onSubmit={handleLogin}>
         <div>
           username <input type='text' value={username} name='Username' onChange={({target}) => setUsername(target.value)}/>
@@ -89,6 +96,7 @@ const App = () => {
   const blogForm = () => (
     <div>
       <h2>blogs</h2>
+      <Notification message={successMessage} notificationType='success' />
       <p>{user.name} logged in<button onClick={handleLogout}>logout</button></p>
       {createBlogForm()}      
       {blogs.map(blog =>
