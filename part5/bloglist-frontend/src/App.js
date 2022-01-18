@@ -18,7 +18,7 @@ const App = () => {
   
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogs( blogs.sort((a, b) => b.likes - a.likes)) 
     )  
   }, [])
 
@@ -50,17 +50,21 @@ const App = () => {
     }
   }
 
-  const updateBlog = async (blogId, updatedBlog) => {
+  const likeBlog = (blogId, updatedBlog) => {
     blogService
       .update(blogId, updatedBlog)
         .then(returnedObject => {
           setBlogs(blogs.map(blog => {
             if (blog.id === blogId) {
-              return returnedObject
+              const likedBlog = JSON.parse(JSON.stringify(blog))
+              likedBlog.likes = returnedObject.likes
+              return likedBlog
             } else {
               return blog
             }
-          }))
+          })
+          .sort((a, b) => b.likes - a.likes)
+        )
         })
   }
 
@@ -84,6 +88,16 @@ const App = () => {
     })
   }
 
+  const removeBlog = async (blogId) => {
+    try {
+      await blogService.remove(blogId)
+      setBlogs(blogs.filter(blog => blog.id !== blogId))
+    } 
+    catch (exception){
+      setErrorMessage('blog not found')
+    }
+  }
+
   const loginPage = () => (
     <div>
       <h2>login to application</h2>
@@ -101,7 +115,7 @@ const App = () => {
         <BlogForm addBlog={addBlog} />
       </Togglable>           
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} updateBlog={updateBlog}/>
+        <Blog key={blog.id} blog={blog} likeBlog={likeBlog} user={user} removeBlog={removeBlog}/>
       )}
     </div>
   )
