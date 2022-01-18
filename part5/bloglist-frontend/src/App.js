@@ -50,6 +50,20 @@ const App = () => {
     }
   }
 
+  const updateBlog = async (blogId, updatedBlog) => {
+    blogService
+      .update(blogId, updatedBlog)
+        .then(returnedObject => {
+          setBlogs(blogs.map(blog => {
+            if (blog.id === blogId) {
+              return returnedObject
+            } else {
+              return blog
+            }
+          }))
+        })
+  }
+
   const handleLogout = () => {
     console.log('logging out')
     window.localStorage.removeItem('loggedInBlogUser')
@@ -87,7 +101,7 @@ const App = () => {
         <BlogForm addBlog={addBlog} />
       </Togglable>           
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog}/>
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog}/>
       )}
     </div>
   )
