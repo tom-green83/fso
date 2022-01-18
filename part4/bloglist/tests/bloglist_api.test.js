@@ -1,3 +1,4 @@
+const { update } = require('lodash')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
@@ -115,8 +116,8 @@ describe('delete request', () => {
 describe('put request to double likes', () => {
   test('results in blog being updated', async () => {
     const blogtoUpdate = (await api.post('/api/blogs').send(helper.blogToUpdate).set('Authorization', authToken)).body
-    blogtoUpdate.likes = 2 * blogtoUpdate.likes 
-    const updatedBlog = (await api.put(`/api/blogs/${helper.blogToUpdate._id}`).send(blogtoUpdate).set('Authorization', authToken)).body
+    blogtoUpdate.likes = 2 * blogtoUpdate.likes
+    const updatedBlog = (await api.put(`/api/blogs/${helper.blogToUpdate._id}`).send(blogtoUpdate)).body
     expect(updatedBlog.likes).toEqual(2 * helper.blogToUpdate.likes)
   })
 })
