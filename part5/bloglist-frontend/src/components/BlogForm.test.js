@@ -31,6 +31,7 @@ describe('new blog form', () => {
       target: { value: `${newBlog.url}` }
     })
     fireEvent.submit(form)
+    expect(addBlog.mock.calls.length).toEqual(1)
     expect(addBlog.mock.calls[0][0]).toEqual(newBlog)
   })
 })
