@@ -16,10 +16,11 @@ describe('blog component', () => {
     username:'username'
   }
 
+  const mockHandler = jest.fn()
   let component
   beforeEach(() => {
     component = render(
-      <Blog blog={blog} user={user}/>
+      <Blog blog={blog} user={user} likeBlog={mockHandler}/>
     )
   })
 
@@ -44,4 +45,12 @@ describe('blog component', () => {
       `likes ${blog.likes}`)
   })
 
+  test('clicking the like button twice calls the event handler twice', () => {
+    const showDetailsButton = component.getByText('show')
+    fireEvent.click(showDetailsButton)
+    const likeButton = component.getByText('like')
+    fireEvent.click(likeButton)
+    fireEvent.click(likeButton)
+    expect(mockHandler.mock.calls).toHaveLength(2)
+  })
 })
