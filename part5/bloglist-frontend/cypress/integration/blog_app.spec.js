@@ -11,6 +11,12 @@ describe('Blog app', function() {
     url: 'example.com'
   }
 
+  const blogToLike = {
+    title: 'Like this blog',
+    author: 'author',
+    url: 'example.com'
+  }
+
   beforeEach(function() {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
     cy.request('POST', 'http://localhost:3003/api/users/', blogCreator)
@@ -45,15 +51,28 @@ describe('Blog app', function() {
       cy.login({ username: `${blogCreator.username}`, password: `${blogCreator.password}` })
     })
 
-    it.only('A blog can be created', function() {
+    it('A blog can be created', function() {
       cy.contains(`${blogCreator.name} logged in`)
-      cy.get('button').contains('create new blog').click()
+      cy.contains('create new blog').click()
       cy.get('#title').type(blogToAdd.title)
       cy.get('#author').type(blogToAdd.author)
       cy.get('#url').type(blogToAdd.url)
       cy.get('#submitBlogButton').click()
       cy.get('.blog').contains(`${blogToAdd.title} ${blogToAdd.author}`)
     })
-  })
 
+    it.only('A blog can be liked', function() {
+      // Add blog to like
+      cy.contains('create new blog').click()
+      cy.get('#title').type(blogToLike.title)
+      cy.get('#author').type(blogToLike.author)
+      cy.get('#url').type(blogToLike.url)
+      cy.get('#submitBlogButton').click()
+
+      // Like the blog
+      cy.contains(`${blogToLike.title}`).get('button').contains('show').click()
+      cy.get('.blog').contains(`${blogToLike.title}`).get('button').contains('like').click()
+      cy.get('.blog').contains(`${blogToLike.title}`).contains('likes 1')
+    })
+  })
 })
