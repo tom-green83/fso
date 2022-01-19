@@ -5,7 +5,7 @@ describe('Blog app', function() {
     password: 'blogcreator'
   }
 
-  const testBlog = {
+  const blogToAdd = {
     title: 'Using Cypress to test blog app',
     author: 'author',
     url: 'example.com'
@@ -48,11 +48,11 @@ describe('Blog app', function() {
     it.only('A blog can be created', function() {
       cy.contains(`${blogCreator.name} logged in`)
       cy.get('button').contains('create new blog').click()
-      cy.get('#title').type(testBlog.title)
-      cy.get('#author').type(testBlog.author)
-      cy.get('#url').type(testBlog.url)
+      cy.get('#title').type(blogToAdd.title)
+      cy.get('#author').type(blogToAdd.author)
+      cy.get('#url').type(blogToAdd.url)
       cy.get('#submitBlogButton').click()
-      cy.get('.blog').contains(`${testBlog.title} ${testBlog.author}`)
+      cy.get('.blog').contains(`${blogToAdd.title} ${blogToAdd.author}`)
     })
   })
 
