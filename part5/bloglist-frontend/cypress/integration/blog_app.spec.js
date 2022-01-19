@@ -5,6 +5,12 @@ describe('Blog app', function() {
     password: 'blogcreator'
   }
 
+  const nonCreator = {
+    username: 'noncreator',
+    name: 'Non Creator',
+    password: 'noncreator'
+  }
+
   const blogToAdd = {
     title: 'Using Cypress to test blog app',
     author: 'author',
@@ -20,6 +26,7 @@ describe('Blog app', function() {
   beforeEach(function() {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
     cy.request('POST', 'http://localhost:3003/api/users/', blogCreator)
+    cy.request('POST', 'http://localhost:3003/api/users/', nonCreator)
     cy.visit('http://localhost:3000')
   })
 
@@ -61,7 +68,7 @@ describe('Blog app', function() {
       cy.get('.blog').contains(`${blogToAdd.title} ${blogToAdd.author}`)
     })
 
-    it.only('A blog can be liked', function() {
+    it('A blog can be liked', function() {
       // Add blog to like
       cy.contains('create new blog').click()
       cy.get('#title').type(blogToLike.title)
@@ -74,5 +81,42 @@ describe('Blog app', function() {
       cy.get('.blog').contains(`${blogToLike.title}`).get('button').contains('like').click()
       cy.get('.blog').contains(`${blogToLike.title}`).contains('likes 1')
     })
+
+    it.only('A blog can be deleted by its creator', function() {
+      // Add blog to delete
+      cy.contains('create new blog').click()
+      cy.get('#title').type(blogToAdd.title)
+      cy.get('#author').type(blogToAdd.author)
+      cy.get('#url').type(blogToAdd.url)
+      cy.get('#submitBlogButton').click()
+
+      // Reload the page to get option to remove blog
+      cy.visit('http://localhost:3000')
+
+      // Delete the blog
+      cy.contains(`${blogToAdd.title}`).get('button').contains('show').click()
+      cy.get('.blog').contains(`${blogToAdd.title}`).get('button').contains('remove').click()
+      cy.contains((`${blogToAdd.title}`)).should('not.exist')
+    })
+
+    it.only('A blog can not  be deleted by a user who did not create it', function() {
+      // Add blog to delete
+      cy.contains('create new blog').click()
+      cy.get('#title').type(blogToAdd.title)
+      cy.get('#author').type(blogToAdd.author)
+      cy.get('#url').type(blogToAdd.url)
+      cy.get('#submitBlogButton').click()
+
+      // Logout as creator and login as another user
+      cy.contains('logout').click()
+      cy.login({ username: `${nonCreator.username}`, password: `${nonCreator.password}` })
+      //Reload page to try loading option to remove blog
+      cy.visit('http://localhost:3000')
+
+      // Try to find button to remove blog
+      cy.contains(`${blogToAdd.title}`).get('button').contains('show').click()
+      cy.get('.blog').contains(`${blogToAdd.title}`).get('button').contains('remove').should('not.be.visible')
+    })
+
   })
 })
