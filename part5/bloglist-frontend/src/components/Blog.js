@@ -20,10 +20,10 @@ const Blog = ({ blog, likeBlog, user, removeBlog }) => {
           <div>{blog.url}</div>
           <div>
             likes {blog.likes}
-            <button onClick={handleLike}>like</button>
+            <button className='likeButton' onClick={handleLike}>like</button>
           </div>
           <div>{blog.user.name}</div>
-          <button style={removeButtonStyle} onClick={handleRemove}>remove</button>
+          <button className='removeButton' style={removeButtonStyle} onClick={handleRemove}>remove</button>
         </div>
       )
     }
@@ -45,7 +45,7 @@ const Blog = ({ blog, likeBlog, user, removeBlog }) => {
   return (
     <div className='blog' style ={blogStyle}>
       {blog.title} {blog.author}
-      <button onClick={() => setShowDetails(!showDetails)}>{showDetails ? 'hide' : 'show'}</button>
+      <button className='toggleDetailsButton' onClick={() => setShowDetails(!showDetails)}>{showDetails ? 'hide' : 'show'}</button>
       {details()}
     </div>
   )

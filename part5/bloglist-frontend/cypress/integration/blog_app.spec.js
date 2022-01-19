@@ -1,3 +1,5 @@
+import { initial } from "lodash"
+
 describe('Blog app', function() {
   const blogCreator = {
     username: 'blogcreator',
@@ -14,14 +16,21 @@ describe('Blog app', function() {
   const blogToAdd = {
     title: 'Using Cypress to test blog app',
     author: 'author',
-    url: 'example.com'
+    url: 'example.com',
+    likes: 1
   }
 
   const blogToLike = {
     title: 'Like this blog',
     author: 'author',
-    url: 'example.com'
+    url: 'example.com',
+    likes: 10
   }
+
+  const blog1Like = { title: '1', author: '1', url: '1', likes: 1 }
+  const blog2Like = { title: '2', author: '2', url: '2', likes: 2 }
+  const blog3Like = { title: '3', author: '3', url: '3', likes: 3 }
+
 
   beforeEach(function() {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
@@ -70,53 +79,77 @@ describe('Blog app', function() {
 
     it('A blog can be liked', function() {
       // Add blog to like
-      cy.contains('create new blog').click()
-      cy.get('#title').type(blogToLike.title)
-      cy.get('#author').type(blogToLike.author)
-      cy.get('#url').type(blogToLike.url)
-      cy.get('#submitBlogButton').click()
+      cy.addBlog(blogToLike)
 
       // Like the blog
       cy.contains(`${blogToLike.title}`).get('button').contains('show').click()
       cy.get('.blog').contains(`${blogToLike.title}`).get('button').contains('like').click()
-      cy.get('.blog').contains(`${blogToLike.title}`).contains('likes 1')
+      cy.get('.blog').contains(`${blogToLike.title}`).contains(`likes ${blogToLike.likes + 1}`)
     })
 
-    it.only('A blog can be deleted by its creator', function() {
+    it('A blog can be deleted by its creator', function() {
       // Add blog to delete
-      cy.contains('create new blog').click()
-      cy.get('#title').type(blogToAdd.title)
-      cy.get('#author').type(blogToAdd.author)
-      cy.get('#url').type(blogToAdd.url)
-      cy.get('#submitBlogButton').click()
-
-      // Reload the page to get option to remove blog
-      cy.visit('http://localhost:3000')
+      cy.addBlog(blogToAdd)
 
       // Delete the blog
-      cy.contains(`${blogToAdd.title}`).get('button').contains('show').click()
-      cy.get('.blog').contains(`${blogToAdd.title}`).get('button').contains('remove').click()
-      cy.contains((`${blogToAdd.title}`)).should('not.exist')
+      cy.get('.blog').contains(`${blogToAdd.title}`).get('.toggleDetailsButton').contains('show').click()
+      cy.get('.blog').contains(`${blogToAdd.title}`).get('.removeButton').click()
+      cy.get('.blog').contains((`${blogToAdd.title}`)).should('not.exist')
     })
 
-    it.only('A blog can not  be deleted by a user who did not create it', function() {
+    it('A blog can not  be deleted by a user who did not create it', function() {
       // Add blog to delete
-      cy.contains('create new blog').click()
-      cy.get('#title').type(blogToAdd.title)
-      cy.get('#author').type(blogToAdd.author)
-      cy.get('#url').type(blogToAdd.url)
-      cy.get('#submitBlogButton').click()
+      cy.addBlog(blogToAdd)
 
       // Logout as creator and login as another user
-      cy.contains('logout').click()
+      cy.logout()
       cy.login({ username: `${nonCreator.username}`, password: `${nonCreator.password}` })
-      //Reload page to try loading option to remove blog
-      cy.visit('http://localhost:3000')
 
       // Try to find button to remove blog
-      cy.contains(`${blogToAdd.title}`).get('button').contains('show').click()
-      cy.get('.blog').contains(`${blogToAdd.title}`).get('button').contains('remove').should('not.be.visible')
+      cy.get('.blog').contains(`${blogToAdd.title}`).get('.toggleDetailsButton').contains('show').click()
+      cy.get('.blog').contains(`${blogToAdd.title}`).get('.removeButton').should('not.be.visible')
     })
 
+    describe('When there are multiple blog posts', function() {
+      beforeEach(function() {
+        cy.addBlog(blog2Like)
+        cy.addBlog(blog1Like)
+        cy.addBlog(blog3Like)
+      })
+
+      it('Blogs are initally sorted by descending number of likes', function() {
+        const initialLikes = [3, 2, 1]
+        cy.get('.toggleDetailsButton').click({ multiple: true })
+        cy.get('.blog').then((blogs) => {
+          console.log(blogs.length)
+          blogs.map((index, blog) => {
+            cy.wrap(blog).contains(`likes ${initialLikes[index]}`)
+          })
+        })
+      })
+
+      it('Blogs are sorted by descending number of likes after liking', function() {
+        cy.get('.toggleDetailsButton').click({ multiple: true })
+
+        // Change 1->5, 2->6, 3->4 likes
+        const finalLikes = [6, 5, 4]
+        for (let i = 0; i <4; i++) {
+          cy.get('.blog').contains(`${blog1Like.title} ${blog1Like.author}`).contains('like').click()
+          cy.wait(200)
+        }
+        for (let i = 0; i <4; i++) {
+          cy.get('.blog').contains(`${blog2Like.title} ${blog2Like.author}`).contains('like').click()
+          cy.wait(200)
+        }
+        cy.get('.blog').contains(`${blog3Like.title} ${blog3Like.author}`).contains('like').click()
+
+        // Check final likes
+        cy.get('.blog').then((blogs) => {
+          blogs.map((index, blog) => {
+            cy.wrap(blog).contains(`likes ${finalLikes[index]}`)
+          })
+        })
+      })
+    })
   })
 })
