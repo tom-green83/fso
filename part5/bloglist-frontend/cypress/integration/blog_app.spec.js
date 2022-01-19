@@ -5,6 +5,12 @@ describe('Blog app', function() {
     password: 'blogcreator'
   }
 
+  const testBlog = {
+    title: 'Using Cypress to test blog app',
+    author: 'author',
+    url: 'example.com'
+  }
+
   beforeEach(function() {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
     cy.request('POST', 'http://localhost:3003/api/users/', blogCreator)
@@ -33,4 +39,21 @@ describe('Blog app', function() {
       cy.get('.error').should('have.css', 'color', 'rgb(255, 0, 0)')
     })
   })
+
+  describe('When logged in', function() {
+    beforeEach(function() {
+      cy.login({ username: `${blogCreator.username}`, password: `${blogCreator.password}` })
+    })
+
+    it.only('A blog can be created', function() {
+      cy.contains(`${blogCreator.name} logged in`)
+      cy.get('button').contains('create new blog').click()
+      cy.get('#title').type(testBlog.title)
+      cy.get('#author').type(testBlog.author)
+      cy.get('#url').type(testBlog.url)
+      cy.get('#submitBlogButton').click()
+      cy.get('.blog').contains(`${testBlog.title} ${testBlog.author}`)
+    })
+  })
+
 })

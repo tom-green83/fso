@@ -32,7 +32,7 @@ const BlogForm = ({ addBlog }) => {
         <div>
         url:<input id='url' type='text' value={url} name='Url' onChange={({ target }) => setUrl(target.value)}/>
         </div>
-        <button type='submit'>create</button>
+        <button id='submitBlogButton' type='submit'>create</button>
       </form>
     </>
   )}

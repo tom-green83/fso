@@ -80,7 +80,6 @@ const App = () => {
     blogService
       .create(newObject)
       .then(returnedObject => {
-        console.log(returnedObject)
         setBlogs(blogs.concat(returnedObject))
         setsuccessMessage(`a new blog ${returnedObject.title} by ${returnedObject.author} added`)
         setTimeout(() => {
