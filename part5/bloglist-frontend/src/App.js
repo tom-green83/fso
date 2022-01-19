@@ -76,10 +76,11 @@ const App = () => {
 
   const addBlog = (newObject) => {
     blogFormRef.current.toggleVisibility()
-    console.log('posting new blog as', username)
+    console.log('posting new blog as', user.username)
     blogService
       .create(newObject)
         .then(returnedObject => {
+        console.log(returnedObject)
         setBlogs(blogs.concat(returnedObject))
         setsuccessMessage(`a new blog ${returnedObject.title} by ${returnedObject.author} added`)
         setTimeout(() => {
