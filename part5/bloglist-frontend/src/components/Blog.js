@@ -16,7 +16,7 @@ const Blog = ({ blog, likeBlog, user, removeBlog }) => {
   const details = () => {
     if (showDetails) {
       return (
-        <div>
+        <div className='togglableBlogDetails'>
           <div>{blog.url}</div>
           <div>
             likes {blog.likes}
@@ -43,7 +43,7 @@ const Blog = ({ blog, likeBlog, user, removeBlog }) => {
   }
 
   return (
-    <div style ={blogStyle}>
+    <div className='blog' style ={blogStyle}>
       {blog.title} {blog.author}
       <button onClick={() => setShowDetails(!showDetails)}>{showDetails ? 'hide' : 'show'}</button>
       {details()}
