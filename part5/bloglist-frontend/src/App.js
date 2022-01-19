@@ -12,14 +12,14 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setsuccessMessage] = useState(null)
   const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('') 
+  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const blogFormRef = useRef()
-  
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs.sort((a, b) => b.likes - a.likes)) 
-    )  
+      setBlogs( blogs.sort((a, b) => b.likes - a.likes))
+    )
   }, [])
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const App = () => {
     event.preventDefault()
     console.log('logging in with', username, password)
     try {
-      const user = await loginService.login({username, password})
+      const user = await loginService.login({ username, password })
       window.localStorage.setItem('loggedInBlogUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
@@ -53,19 +53,19 @@ const App = () => {
   const likeBlog = (blogId, updatedBlog) => {
     blogService
       .update(blogId, updatedBlog)
-        .then(returnedObject => {
-          setBlogs(blogs.map(blog => {
-            if (blog.id === blogId) {
-              const likedBlog = JSON.parse(JSON.stringify(blog))
-              likedBlog.likes = returnedObject.likes
-              return likedBlog
-            } else {
-              return blog
-            }
-          })
+      .then(returnedObject => {
+        setBlogs(blogs.map(blog => {
+          if (blog.id === blogId) {
+            const likedBlog = JSON.parse(JSON.stringify(blog))
+            likedBlog.likes = returnedObject.likes
+            return likedBlog
+          } else {
+            return blog
+          }
+        })
           .sort((a, b) => b.likes - a.likes)
         )
-        })
+      })
   }
 
   const handleLogout = () => {
@@ -79,21 +79,21 @@ const App = () => {
     console.log('posting new blog as', user.username)
     blogService
       .create(newObject)
-        .then(returnedObject => {
+      .then(returnedObject => {
         console.log(returnedObject)
         setBlogs(blogs.concat(returnedObject))
         setsuccessMessage(`a new blog ${returnedObject.title} by ${returnedObject.author} added`)
         setTimeout(() => {
-        setsuccessMessage(null)
-      }, 5000)
-    })
+          setsuccessMessage(null)
+        }, 5000)
+      })
   }
 
   const removeBlog = async (blogId) => {
     try {
       await blogService.remove(blogId)
       setBlogs(blogs.filter(blog => blog.id !== blogId))
-    } 
+    }
     catch (exception){
       setErrorMessage('blog not found')
     }
@@ -106,7 +106,7 @@ const App = () => {
       <LoginForm handleLogin={handleLogin} username={username} setUsername={setUsername} password={password} setPassword={setPassword} />
     </div>
   )
-  
+
   const blogPage = () => (
     <div>
       <h2>blogs</h2>
@@ -114,19 +114,19 @@ const App = () => {
       <p>{user.name} logged in<button onClick={handleLogout}>logout</button></p>
       <Togglable buttonLabel='create new blog' ref={blogFormRef}>
         <BlogForm addBlog={addBlog} />
-      </Togglable>           
+      </Togglable>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} likeBlog={likeBlog} user={user} removeBlog={removeBlog}/>
       )}
     </div>
   )
-  
+
   return(
     <div>
-        {user === null
-          ? loginPage()
-          : blogPage()
-        }     
+      {user === null
+        ? loginPage()
+        : blogPage()
+      }
     </div>
   )
 }

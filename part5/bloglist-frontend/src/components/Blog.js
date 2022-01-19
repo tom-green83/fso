@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const Blog = ({blog, likeBlog, user, removeBlog}) => {
+const Blog = ({ blog, likeBlog, user, removeBlog }) => {
   const [showDetails, setShowDetails] = useState(false)
   const blogStyle = {
     paddingTop: 10,
@@ -14,7 +14,7 @@ const Blog = ({blog, likeBlog, user, removeBlog}) => {
 
   // Define details to show when "view" is clicked
   const details = () => {
-    if (showDetails) {      
+    if (showDetails) {
       return (
         <div>
           <div>{blog.url}</div>
@@ -24,7 +24,7 @@ const Blog = ({blog, likeBlog, user, removeBlog}) => {
           </div>
           <div>{blog.user.name}</div>
           <button style={removeButtonStyle} onClick={handleRemove}>remove</button>
-        </div>          
+        </div>
       )
     }
   }
@@ -44,10 +44,10 @@ const Blog = ({blog, likeBlog, user, removeBlog}) => {
 
   return (
     <div style ={blogStyle}>
-    {blog.title} {blog.author}
-    <button onClick={() => setShowDetails(!showDetails)}>{showDetails ? 'hide' : 'show'}</button>
-    {details()}
-    </div>  
+      {blog.title} {blog.author}
+      <button onClick={() => setShowDetails(!showDetails)}>{showDetails ? 'hide' : 'show'}</button>
+      {details()}
+    </div>
   )
 }
 
