@@ -41,8 +41,8 @@ describe('Blog app', function() {
 
   it('Login form is shown', function() {
     cy.contains('login to application')
-    cy.contains('username')
-    cy.contains('password')
+    cy.get('#username').parent().contains('username')
+    cy.get('#password').parent().contains('password')
     cy.contains('login')
   })
 
@@ -121,7 +121,6 @@ describe('Blog app', function() {
         const initialLikes = [3, 2, 1]
         cy.get('.toggleDetailsButton').click({ multiple: true })
         cy.get('.blog').then((blogs) => {
-          console.log(blogs.length)
           blogs.map((index, blog) => {
             cy.wrap(blog).contains(`likes ${initialLikes[index]}`)
           })
