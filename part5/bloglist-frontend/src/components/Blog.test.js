@@ -1,6 +1,6 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { render } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react'
 import Blog from './Blog'
 
 describe('blog component', () => {
@@ -25,14 +25,23 @@ describe('blog component', () => {
 
   test('renders blog title and author by default', () => {
     expect(component.container).toHaveTextContent(
-      'Component testing is done with react-testing-library')
+      `${blog.title}`)
     expect(component.container).toHaveTextContent(
-      'author')
+      `${blog.author}`)
   })
 
   test('does not render url and likes by default', () => {
     const div  = component.container.querySelector('togglableBlogDetails')
     expect(div).toBe(null)
+  })
+
+  test('renders url and likes after clicking', () => {
+    const button = component.getByText('show')
+    fireEvent.click(button)
+    expect(component.container).toHaveTextContent(
+      `${blog.url}`)
+    expect(component.container).toHaveTextContent(
+      `likes ${blog.likes}`)
   })
 
 })
