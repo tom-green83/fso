@@ -1,13 +1,13 @@
 describe('Blog app', function() {
-  const testUser = {
-    username: 'testuser',
-    name: 'Test user',
-    password: 'password'
+  const blogCreator = {
+    username: 'blogcreator',
+    name: 'Blog Creator',
+    password: 'blogcreator'
   }
 
   beforeEach(function() {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
-    cy.request('POST', 'http://localhost:3003/api/users/', testUser)
+    cy.request('POST', 'http://localhost:3003/api/users/', blogCreator)
     cy.visit('http://localhost:3000')
   })
 
@@ -16,5 +16,21 @@ describe('Blog app', function() {
     cy.contains('username')
     cy.contains('password')
     cy.contains('login')
+  })
+
+  describe('Login', function () {
+    it('succeeds with correct credentials', function() {
+      cy.get('#username').type(blogCreator.username)
+      cy.get('#password').type(blogCreator.password)
+      cy.get('#login-button').click()
+      cy.contains(`${blogCreator.name} logged in`)
+    })
+
+    it('fails with wrong credentials', function() {
+      cy.get('#username').type(blogCreator.username)
+      cy.get('#login-button').click()
+      cy.get('.error').contains('invalid credentials')
+      cy.get('.error').should('have.css', 'color', 'rgb(255, 0, 0)')
+    })
   })
 })
