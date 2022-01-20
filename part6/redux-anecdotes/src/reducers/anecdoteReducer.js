@@ -24,10 +24,14 @@ const reducer = (state = initialState, action) => {
   console.log('action', action)
   switch (action.type){
     case 'VOTE':
-      return state.map(anecdote => {return (
+      state = state.map(anecdote => {return (
         anecdote.id === action.data.id 
         ? {...anecdote, votes: anecdote.votes + 1} 
         : anecdote)})
+        return state
+    case 'ADD_ANECDOTE':
+      state = state.concat(action.data)
+      return state
     default: return state
   }
 }
@@ -36,6 +40,13 @@ export const voteCreator = (id) => {
   return {
     type: 'VOTE',
     data: {id}
+  }
+}
+
+export const addAnecdoteCreator = (anecdote) => {
+  return {
+    type: 'ADD_ANECDOTE',
+    data: asObject(anecdote)
   }
 }
 
