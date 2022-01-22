@@ -1,4 +1,4 @@
-const initialState = {}
+const initialState = { text: '' }
 
 const notificationReducer = (state = initialState, action) => {
   // console.log('state now: ', state)
@@ -8,7 +8,7 @@ const notificationReducer = (state = initialState, action) => {
     state = action.text
     return state
   case 'REMOVE_NOTIFICATION':
-    state = {}
+    state = { text: '' }
     return state
   default: return state
   }
@@ -23,8 +23,7 @@ export const addNotification = (text) => {
 
 export const removeNotification = () => {
   return {
-    type: 'REMOVE_NOTIFICATION',
-    text: ''
+    type: 'REMOVE_NOTIFICATION'
   }
 }
 
