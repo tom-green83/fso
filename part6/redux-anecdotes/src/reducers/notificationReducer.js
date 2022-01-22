@@ -14,14 +14,23 @@ const notificationReducer = (state = initialState, action) => {
   }
 }
 
-export const addNotification = (text) => {
+export const setNotification = (text, seconds) => {
+  return dispatch => {
+    dispatch(addNotification(text))
+    setTimeout(() => {
+      dispatch(removeNotification())
+    }, seconds * 1000)
+  }
+}
+
+const addNotification = (text) => {
   return {
     type: 'ADD_NOTIFICATION',
     text: { text }
   }
 }
 
-export const removeNotification = () => {
+const removeNotification = () => {
   return {
     type: 'REMOVE_NOTIFICATION'
   }
