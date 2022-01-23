@@ -136,7 +136,7 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
-    history.push(`/anecdotes/${anecdote.id}`)
+    history.push('/')
     clearTimeout(notificationTimeoutID)
     setNotification(`a new anecdote ${anecdote.content} created!`)
     setTimeout(() => setNotification(''), 10000)
