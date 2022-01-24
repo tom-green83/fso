@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { Switch, Route } from 'react-router-dom'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -6,6 +7,7 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
+import Menu from './components/Menu'
 import { useSelector, useDispatch } from 'react-redux'
 
 // Action creators
@@ -34,7 +36,7 @@ const App = () => {
     const loggedInUserJSON = window.localStorage.getItem('loggedInBlogUser')
     if (loggedInUserJSON) {
       const user = JSON.parse(loggedInUserJSON)
-      setUser(user)
+      dispatch(setUser(user))
       blogService.setToken(user.token)
     }
   }, [])
@@ -110,9 +112,6 @@ const App = () => {
 
   const blogPage = () => (
     <div>
-      <h2>blogs</h2>
-      <Notification message={notificationMessage} notificationType='success' />
-      <p>{user.name} logged in<button onClick={handleLogout}>logout</button></p>
       <Togglable buttonLabel='create new blog' ref={blogFormRef}>
         <BlogForm addBlog={addBlog} />
       </Togglable>
@@ -124,10 +123,20 @@ const App = () => {
 
   return(
     <div>
-      {user === null
-        ? loginPage()
-        : blogPage()
-      }
+      <Menu handleLogout={handleLogout}/>
+      <h1>blog app</h1>
+      <Notification message={notificationMessage} notificationType='success' />
+      <Switch>
+        <Route path = "/users">
+          users
+        </Route>
+        <Route path = "/">
+          {user === null
+            ? loginPage()
+            : blogPage()
+          }
+        </Route>
+      </Switch>
     </div>
   )
 }
