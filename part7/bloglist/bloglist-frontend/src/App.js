@@ -6,15 +6,20 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
+import { setNotification } from './reducers/notificationReducer'
+import { useSelector, useDispatch } from 'react-redux'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [errorMessage, setErrorMessage] = useState(null)
-  const [successMessage, setsuccessMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const blogFormRef = useRef()
+  const notificationDuration = 1
+
+  // Redux variables
+  const dispatch = useDispatch()
+  const notificationMessage = useSelector(state => state.notificationMessage.text)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -43,10 +48,7 @@ const App = () => {
       setPassword('')
     }
     catch (exception) {
-      setErrorMessage('invalid credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      dispatch(setNotification('invalid credentials', notificationDuration))
     }
   }
 
@@ -81,10 +83,7 @@ const App = () => {
       .create(newObject)
       .then(returnedObject => {
         setBlogs(blogs.concat(returnedObject))
-        setsuccessMessage(`a new blog ${returnedObject.title} by ${returnedObject.author} added`)
-        setTimeout(() => {
-          setsuccessMessage(null)
-        }, 5000)
+        dispatch(setNotification(`a new blog ${returnedObject.title} by ${returnedObject.author} added`, notificationDuration))
       })
   }
 
@@ -94,14 +93,14 @@ const App = () => {
       setBlogs(blogs.filter(blog => blog.id !== blogId))
     }
     catch (exception){
-      setErrorMessage('blog not found')
+      dispatch(setNotification('blog not found', notificationDuration))
     }
   }
 
   const loginPage = () => (
     <div>
       <h2>login to application</h2>
-      <Notification message={errorMessage} notificationType='error' />
+      <Notification message={notificationMessage} notificationType='error' />
       <LoginForm handleLogin={handleLogin} username={username} setUsername={setUsername} password={password} setPassword={setPassword} />
     </div>
   )
@@ -109,7 +108,7 @@ const App = () => {
   const blogPage = () => (
     <div>
       <h2>blogs</h2>
-      <Notification message={successMessage} notificationType='success' />
+      <Notification message={notificationMessage} notificationType='success' />
       <p>{user.name} logged in<button onClick={handleLogout}>logout</button></p>
       <Togglable buttonLabel='create new blog' ref={blogFormRef}>
         <BlogForm addBlog={addBlog} />
