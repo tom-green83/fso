@@ -11,11 +11,11 @@ import { useSelector, useDispatch } from 'react-redux'
 // Action creators
 import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs, setBlogs } from './reducers/blogReducer'
+import { setUser } from './reducers/userReducer'
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
   const blogFormRef = useRef()
   const notificationDuration = 5
 
@@ -23,6 +23,7 @@ const App = () => {
   const dispatch = useDispatch()
   const notificationMessage = useSelector(state => state.notificationMessage.text)
   const blogs = useSelector(state => state.blogs)
+  const user = useSelector(state => state.user)
 
   // Initialise blogs
   useEffect(() => {
@@ -45,7 +46,7 @@ const App = () => {
       const user = await loginService.login({ username, password })
       window.localStorage.setItem('loggedInBlogUser', JSON.stringify(user))
       blogService.setToken(user.token)
-      setUser(user)
+      dispatch(setUser(user))
       setUsername('')
       setPassword('')
     }
@@ -75,7 +76,7 @@ const App = () => {
   const handleLogout = () => {
     console.log('logging out')
     window.localStorage.removeItem('loggedInBlogUser')
-    setUser(null)
+    dispatch(setUser(null))
   }
 
   const addBlog = (newObject) => {
