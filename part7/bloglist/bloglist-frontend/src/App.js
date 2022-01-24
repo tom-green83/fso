@@ -6,25 +6,27 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
-import { setNotification } from './reducers/notificationReducer'
 import { useSelector, useDispatch } from 'react-redux'
 
+// Action creators
+import { setNotification } from './reducers/notificationReducer'
+import { initializeBlogs, setBlogs } from './reducers/blogReducer'
+
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const blogFormRef = useRef()
-  const notificationDuration = 1
+  const notificationDuration = 5
 
   // Redux variables
   const dispatch = useDispatch()
   const notificationMessage = useSelector(state => state.notificationMessage.text)
+  const blogs = useSelector(state => state.blogs)
 
+  // Initialise blogs
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs.sort((a, b) => b.likes - a.likes))
-    )
+    dispatch(initializeBlogs())
   }, [])
 
   useEffect(() => {
@@ -56,7 +58,7 @@ const App = () => {
     blogService
       .update(blogId, updatedBlog)
       .then(returnedObject => {
-        setBlogs(blogs.map(blog => {
+        dispatch(setBlogs(blogs.map(blog => {
           if (blog.id === blogId) {
             const likedBlog = JSON.parse(JSON.stringify(blog))
             likedBlog.likes = returnedObject.likes
@@ -66,7 +68,7 @@ const App = () => {
           }
         })
           .sort((a, b) => b.likes - a.likes)
-        )
+        ))
       })
   }
 
@@ -82,7 +84,7 @@ const App = () => {
     blogService
       .create(newObject)
       .then(returnedObject => {
-        setBlogs(blogs.concat(returnedObject))
+        dispatch(setBlogs(blogs.concat(returnedObject)))
         dispatch(setNotification(`a new blog ${returnedObject.title} by ${returnedObject.author} added`, notificationDuration))
       })
   }
@@ -90,7 +92,7 @@ const App = () => {
   const removeBlog = async (blogId) => {
     try {
       await blogService.remove(blogId)
-      setBlogs(blogs.filter(blog => blog.id !== blogId))
+      dispatch(setBlogs(blogs.filter(blog => blog.id !== blogId)))
     }
     catch (exception){
       dispatch(setNotification('blog not found', notificationDuration))
