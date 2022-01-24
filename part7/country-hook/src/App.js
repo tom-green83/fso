@@ -19,18 +19,18 @@ const useCountry = (name) => {
   const [country, setCountry] = useState(null)
   const url = `https://restcountries.com/v2/name/${name}`
 
-useEffect(() => {
+  useEffect(() => {
     if (name.length) {
-    axios
-    .get(url)
-    .then(response => {
-      if (response.data.status === 404){
-        setCountry({found:false})
-      } else {
-        setCountry({found:true, data: response.data[0]})
-      }
-    })
-  }
+      axios
+        .get(url)
+        .then(response => {
+          if (response.data.status === 404){
+            setCountry({ found:false })
+          } else {
+            setCountry({ found:true, data: response.data[0] })
+          }
+        })
+    }
   }, [name, url])
   return country
 }
@@ -52,8 +52,8 @@ const Country = ({ country }) => {
     <div>
       <h3>{country.data.name} </h3>
       <div>capital {country.data.capital} </div>
-      <div>population {country.data.population}</div> 
-      <img src={country.data.flag} height='100' alt={`flag of ${country.data.name}`}/>  
+      <div>population {country.data.population}</div>
+      <img src={country.data.flag} height='100' alt={`flag of ${country.data.name}`}/>
     </div>
   )
 }
