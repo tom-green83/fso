@@ -8,12 +8,15 @@ import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import Menu from './components/Menu'
+import Users from './components/Users'
 import { useSelector, useDispatch } from 'react-redux'
 
 // Action creators
 import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs, setBlogs } from './reducers/blogReducer'
 import { setUser } from './reducers/userReducer'
+import { setUsers } from './reducers/usersReducer'
+import axios from 'axios'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -26,11 +29,19 @@ const App = () => {
   const notificationMessage = useSelector(state => state.notificationMessage.text)
   const blogs = useSelector(state => state.blogs)
   const user = useSelector(state => state.user)
+  const users = useSelector(state => state.users)
 
   // Initialise blogs
   useEffect(() => {
     dispatch(initializeBlogs())
   }, [])
+
+  // Update list of users
+  const usersUrl = 'http://localhost:3003/api/users'
+  useEffect(async () => {
+    const users = (await axios.get(usersUrl)).data
+    dispatch(setUsers(users))
+  }, [blogs])
 
   useEffect(() => {
     const loggedInUserJSON = window.localStorage.getItem('loggedInBlogUser')
@@ -112,6 +123,7 @@ const App = () => {
 
   const blogPage = () => (
     <div>
+      <Notification message={notificationMessage} notificationType='success' />
       <Togglable buttonLabel='create new blog' ref={blogFormRef}>
         <BlogForm addBlog={addBlog} />
       </Togglable>
@@ -125,10 +137,9 @@ const App = () => {
     <div>
       <Menu handleLogout={handleLogout}/>
       <h1>blog app</h1>
-      <Notification message={notificationMessage} notificationType='success' />
       <Switch>
         <Route path = "/users">
-          users
+          <Users users={users} />
         </Route>
         <Route path = "/">
           {user === null
