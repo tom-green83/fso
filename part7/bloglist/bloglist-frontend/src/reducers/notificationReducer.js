@@ -4,7 +4,10 @@ let timeoutID
 const notificationReducer = (state = initialState, action) => {
   switch (action.type){
   case 'ADD_NOTIFICATION':
-    state = action.text
+    state = {
+      text: action.text,
+      notificationType: action.notificationType
+    }
     return state
   case 'REMOVE_NOTIFICATION':
     state = { text: null }
@@ -13,20 +16,21 @@ const notificationReducer = (state = initialState, action) => {
   }
 }
 
-export const setNotification = (text, seconds) => {
+export const setNotification = ( text, notificationType , seconds) => {
   return dispatch => {
     clearTimeout(timeoutID)
-    dispatch(addNotification(text))
+    dispatch(addNotification(text, notificationType))
     timeoutID = setTimeout(() => {
       dispatch(removeNotification())
     }, seconds * 1000)
   }
 }
 
-const addNotification = (text) => {
+const addNotification = (text, notificationType) => {
   return {
     type: 'ADD_NOTIFICATION',
-    text: { text }
+    text: text,
+    notificationType: notificationType
   }
 }
 

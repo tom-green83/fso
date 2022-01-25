@@ -1,16 +1,26 @@
-const userReducer = (state = null, action) => {
+import axios from 'axios'
+
+const userReducer = (state = [], action) => {
   switch (action.type){
-  case 'SET_USER':
-    state = action.user
+  case 'SET_USERS':
+    state = action.users
     return state
   default: return state
   }
 }
 
-export const setUser = (user) => {
+export const setUsers = (users) => {
   return  {
-    type: 'SET_USER',
-    user: user
+    type: 'SET_USERS',
+    users: users
+  }
+}
+
+export const initializeUsers = () => {
+  return async dispatch => {
+    const usersUrl = 'http://localhost:3003/api/users'
+    const users = (await axios.get(usersUrl)).data
+    dispatch (setUsers(users))
   }
 }
 

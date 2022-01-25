@@ -1,6 +1,9 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
-const Users = ({ users }) => {
+const Users = () => {
+  const users = useSelector(state => state.users)
+
   const tableRows = (users) => {
     return(
       <>
