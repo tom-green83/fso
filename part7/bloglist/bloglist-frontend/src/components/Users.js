@@ -1,24 +1,26 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 const Users = () => {
   const users = useSelector(state => state.users)
 
-  const tableRows = (users) => {
-    return(
-      <>
-        {users.map(user => {
-          return(
-            <tr key={user.id}>
-              <td>{user.name}</td>
-              <td>{user.blogs.length}</td>
-            </tr>
-          )
-        })}
-      </>
-    )
+  const tableRows = (
+    users.map(user => {
+      const userLink = `/users/${user.id}`
+      return(
+        <tr key={user.id}>
+          <td>
+            <Link to={userLink}>
+              {user.name}
+            </Link>
+          </td>
+          <td>{user.blogs.length}</td>
+        </tr>
+      )
+    })
+  )
 
-  }
 
   return (
     <>
@@ -31,7 +33,7 @@ const Users = () => {
           </tr>
         </thead>
         <tbody>
-          {tableRows(users)}
+          {tableRows}
         </tbody>
       </table>
     </>

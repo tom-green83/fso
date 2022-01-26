@@ -1,9 +1,7 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { setUser } from '../reducers/loginReducer'
-import { useHistory } from 'react-router-dom'
-
 
 const Menu = ( ) => {
   const dispatch = useDispatch()
