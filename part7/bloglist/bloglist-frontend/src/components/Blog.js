@@ -5,6 +5,7 @@ import blogService from '../services/blogs'
 import { setBlogs } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { useHistory } from 'react-router-dom'
+import CommentForm from './CommentForm'
 
 
 const Blog = ({ notificationDuration }) => {
@@ -75,6 +76,7 @@ const Blog = ({ notificationDuration }) => {
           <button className='removeButton' style={removeButtonStyle} onClick={handleRemove}>remove</button>
         </div>
         <h3>comments</h3>
+        <CommentForm />
         <div>
           <ul>
             {blog.comments.map((comment, index) =>
