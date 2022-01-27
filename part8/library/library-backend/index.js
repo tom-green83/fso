@@ -115,7 +115,11 @@ const typeDefs = gql`
       author: String
       published: Int!
       genres: [String!]!
-    ): Book
+    ): Book!,
+    editAuthor(
+      name: String!,
+      setBornTo: Int!
+    ): Author
   }
 
 `
@@ -142,12 +146,31 @@ const resolvers = {
   Mutation: {
     addBook: (root, args) => {
       if (!(authors.find(author => author.author===args.author))) {
-        const newAuthor = { ...args, id: uuid() }
+        const newAuthor = { author: args.author, id: uuid() }
         authors = authors.concat(newAuthor)
       }
+
       const newBook = { ...args, id: uuid() }
       books = books.concat(newBook)
       return newBook
+    },
+    editAuthor: (root, args) => {
+      const oldAuthor = (authors.find(author => author.author===args.name))
+      const updatedAuthor = { ...oldAuthor, born: args.setBornTo }
+
+      if (!oldAuthor) {
+        return null
+      }
+
+      authors = authors.map(author => {
+        return (
+          author.author===args.name
+            ? updatedAuthor
+            : author
+        )
+      })
+
+      return updatedAuthor
     }
   }
 }
