@@ -7,6 +7,7 @@ import { setBlogs } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router-dom'
+import { ListGroup } from 'react-bootstrap'
 
 const Blogs = ( { notificationDuration }) => {
   const dispatch = useDispatch()
@@ -14,14 +15,6 @@ const Blogs = ( { notificationDuration }) => {
   const blogFormRef = useRef()
   const blogs = useSelector(state => state.blogs)
   const history = useHistory()
-
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
 
   const addBlog = (newObject) => {
     blogFormRef.current.toggleVisibility()
@@ -47,14 +40,13 @@ const Blogs = ( { notificationDuration }) => {
       <Togglable buttonLabel='create new blog' ref={blogFormRef}>
         <BlogForm addBlog={addBlog} />
       </Togglable>
-      {blogs.map(blog =>
-        <div key={blog.id} style={blogStyle}>
-          <Link to={`/blogs/${blog.id}`}>
+      <ListGroup as='ul'>
+        {blogs.map(blog =>
+          <ListGroup.Item key={blog.id} as={Link} to={`/blogs/${blog.id}`}>
             {blog.title}
-          </Link>
-        </div>
-
-      )}
+          </ListGroup.Item>
+        )}
+      </ListGroup>
     </div>
   )
 }

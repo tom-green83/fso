@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
-import Notification from './components/Notification'
 import Blog from './components/Blog'
+import Alert from 'react-bootstrap/Alert'
+
+
 
 import Blogs from './components/Blogs'
 import Login from './components/Login'
@@ -39,10 +41,14 @@ const App = () => {
   }, [])
 
   return(
-    <div>
+    <div className='container'>
       <Menu />
       <h1>blog app</h1>
-      <Notification notification={notification}/>
+      {notification.text
+        ? <Alert variant={notification.notificationType}>
+          {notification.text}
+        </Alert>
+        : null}
       <Switch>
         <Route path = "/blogs/:id">
           <Blog notificationDuration={notificationDuration} />

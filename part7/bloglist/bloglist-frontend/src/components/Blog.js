@@ -6,7 +6,7 @@ import { setBlogs } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { useHistory } from 'react-router-dom'
 import CommentForm from './CommentForm'
-
+import { ListGroup, Button } from 'react-bootstrap'
 
 const Blog = ({ notificationDuration }) => {
   const id = useParams().id
@@ -51,7 +51,7 @@ const Blog = ({ notificationDuration }) => {
       dispatch(setBlogs(blogs.filter(blog => blog.id !== blogId)))
     }
     catch (exception){
-      dispatch(setNotification('blog not found', 'error', notificationDuration))
+      dispatch(setNotification('blog not found', 'danger', notificationDuration))
     }
     history.push('/blogs')
   }
@@ -64,27 +64,27 @@ const Blog = ({ notificationDuration }) => {
     return (
       <div className='blog'>
         <h1>{blog.title} {blog.author}</h1>
+        <ListGroup>
+          <ListGroup.Item><a href={`${blog.url}`}>{blog.url}</a></ListGroup.Item>
+          <ListGroup.Item>
+            {blog.likes} likes
+            <Button className='likeButton' onClick={handleLike}>like</Button>
+          </ListGroup.Item>
+          <ListGroup.Item> added by {blog.user.name}</ListGroup.Item>
+        </ListGroup>
         <div>
-          <a href={`${blog.url}`}>{blog.url}</a>
-        </div>
-        <div>
-          {blog.likes} likes
-          <button className='likeButton' onClick={handleLike}>like</button>
-        </div>
-      added by {blog.user.name}
-        <div>
-          <button className='removeButton' style={removeButtonStyle} onClick={handleRemove}>remove</button>
+          <Button variant='danger' className='removeButton' style={removeButtonStyle} onClick={handleRemove}>remove</Button>
         </div>
         <h3>comments</h3>
         <CommentForm />
         <div>
-          <ul>
+          <ListGroup>
             {blog.comments.map((comment, index) =>
-              <li key={index}>
+              <ListGroup.Item key={index}>
                 {comment}
-              </li>
+              </ListGroup.Item>
             )}
-          </ul>
+          </ListGroup>
         </div>
       </div>
     )

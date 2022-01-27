@@ -3,6 +3,7 @@ import blogService from '../services/blogs'
 import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { setBlogs } from '../reducers/blogReducer'
+import { Form, Button } from 'react-bootstrap'
 
 const CommentForm = () => {
   const [comment, setComment] = useState('')
@@ -25,10 +26,10 @@ const CommentForm = () => {
 
   return(
     <>
-      <form className='commentForm' onSubmit={handleSubmit}>
-        <input id='comment' type='text' value={comment} onChange={({ target }) => setComment(target.value)}></input>
-        <button id='submitCommentButton' type='submit'>add comment</button>
-      </form>
+      <Form className='commentForm' onSubmit={handleSubmit}>
+        <Form.Control id='comment' type='text' value={comment} onChange={({ target }) => setComment(target.value)}></Form.Control>
+        <Button id='submitCommentButton' type='submit'>add comment</Button>
+      </Form>
     </>
   )
 }
