@@ -76,3 +76,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZ
 
 ### Reset DB for cypress tests
 POST http://localhost:3003/api/testing/reset HTTP/1.1
+
+### Add comment to blog with id 61f2847b5de86a6ee8d815d5
+POST http://localhost:3003/api/blogs/61f2847b5de86a6ee8d815d5 HTTP/1.1
+content-type: application/json
+
+  {
+    "comment": "Nice"
+  }

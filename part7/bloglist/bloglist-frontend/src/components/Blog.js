@@ -74,6 +74,16 @@ const Blog = ({ notificationDuration }) => {
         <div>
           <button className='removeButton' style={removeButtonStyle} onClick={handleRemove}>remove</button>
         </div>
+        <h3>comments</h3>
+        <div>
+          <ul>
+            {blog.comments.map((comment, index) =>
+              <li key={index}>
+                {comment}
+              </li>
+            )}
+          </ul>
+        </div>
       </div>
     )
 
