@@ -5,14 +5,9 @@ import { useSelector } from 'react-redux'
 const User = () => {
   const id = useParams().id
   const user = useSelector(state => state.users.find(user => user.id === id))
-  console.log(id, user)
 
   if (!user) {
-    return (
-      <>
-        <h1>loading data</h1>
-      </>
-    )
+    return null
   } else {
     const listItems = (
       user.blogs.map(blog =>

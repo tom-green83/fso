@@ -11,7 +11,6 @@ import blogService from './services/blogs'
 import { setUser } from './reducers/loginReducer'
 import { initializeUsers } from './reducers/userReducer'
 import { initializeBlogs } from './reducers/blogReducer'
-import { useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min'
 
 const App = () => {
   const notificationDuration = 5
@@ -37,13 +36,6 @@ const App = () => {
     dispatch(initializeUsers())
   }, [])
 
-  const match = useRouteMatch('/users/:id')
-  const users = useSelector(state => state.users)
-  const user = match
-    ? users.find(user => user.id===Number(match.params.id))
-    : null
-  console.log(user)
-
   return(
     <div>
       <Menu />
@@ -57,7 +49,7 @@ const App = () => {
           <Login notificationDuration={notificationDuration} />
         </Route>
         <Route path = "/users/:id">
-          <User user={user}/>
+          <User />
         </Route>
         <Route path = "/users">
           <Users />
