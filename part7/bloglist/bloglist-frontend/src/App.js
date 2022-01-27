@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import Notification from './components/Notification'
+import Blog from './components/Blog'
+
 import Blogs from './components/Blogs'
 import Login from './components/Login'
 import Menu from './components/Menu'
@@ -42,6 +44,9 @@ const App = () => {
       <h1>blog app</h1>
       <Notification notification={notification}/>
       <Switch>
+        <Route path = "/blogs/:id">
+          <Blog notificationDuration={notificationDuration} />
+        </Route>
         <Route path = "/blogs">
           <Blogs notificationDuration={notificationDuration} />
         </Route>
