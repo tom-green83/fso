@@ -4,7 +4,6 @@ import { useQuery } from '@apollo/client'
 
 const Books = (props) => {
   const result = useQuery(ALL_BOOKS_NO_GENRES)
-  console.log(result.data)
   if (result.loading) {
     return <div>loading...</div>
   }
