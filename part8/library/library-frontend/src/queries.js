@@ -6,6 +6,7 @@ query {
     name
     born
     bookCount
+    id
   }
 }
 `
@@ -15,6 +16,7 @@ query {
     title    
     author
     published
+    id
   }
 }
 `

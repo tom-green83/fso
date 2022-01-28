@@ -38,7 +38,7 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
-      <EditBornForm />
+      <EditBornForm ALL_AUTHORS={ALL_AUTHORS} authors={authors}/>
 
     </div>
   )
