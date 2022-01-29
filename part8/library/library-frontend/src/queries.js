@@ -35,7 +35,6 @@ query {
   }
 }
 `
-
 export const CREATE_BOOK = gql`
 mutation createBook ($author: String!, $genres: [String!]!, $published: Int!, $title: String!) {
   addBook (
@@ -74,6 +73,15 @@ mutation login($username: String!, $password : String!) {
     password: $password
   ) {
     value
+  }
+}
+`
+
+export const GET_USER_INFO = gql`
+query {
+  me {
+    username
+    favoriteGenre
   }
 }
 `
