@@ -1,5 +1,4 @@
 const { ApolloServer, UserInputError, AuthenticationError, gql } = require('apollo-server')
-const { v4: uuid } = require('uuid')
 require('dotenv').config()
 const mongoose = require('mongoose')
 const Book = require('./models/Book')
@@ -78,7 +77,7 @@ const resolvers = {
       } catch (error) {
         throw new UserInputError(error.message, { invalidArgs: args })
       }
-      pubsub.publish('BOOK_ADDED', { bookAdded: newBook})
+      pubsub.publish('BOOK_ADDED', { bookAdded: newBook })
       return newBook
     },
     editAuthor: async (root, args, context) => {

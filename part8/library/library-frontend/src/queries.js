@@ -23,7 +23,7 @@ query allAuthors {
 }
 `
 export const ALL_BOOKS_NO_GENRES = gql`
-query {
+query allBooksNoGenres{
   allBooks {
     title
     published
@@ -35,7 +35,7 @@ query {
 }
 `
 export const ALL_BOOKS = gql`
-query {
+query allBooks {
   allBooks {
     title
     published
