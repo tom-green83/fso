@@ -35,13 +35,13 @@ const authors = [
 */
 
 const books = [
-  {
-    title: 'Clean Code',
-    published: 2008,
-    author: 'Robert Martin',
-    id: 'afa5b6f4-344d-11e9-a414-719c6709cf3e',
-    genres: ['refactoring']
-  },
+  // {
+  //   title: 'Clean Code',
+  //   published: 2008,
+  //   author: 'Robert Martin',
+  //   id: 'afa5b6f4-344d-11e9-a414-719c6709cf3e',
+  //   genres: ['refactoring']
+  // },
   {
     title: 'Agile software development',
     published: 2002,
@@ -77,13 +77,13 @@ const books = [
     id: 'afa5de03-344d-11e9-a414-719c6709cf3e',
     genres: ['classic', 'crime']
   },
-  {
-    title: 'The Demon ',
-    published: 1872,
-    author: 'Fyodor Dostoevsky',
-    id: 'afa5de04-344d-11e9-a414-719c6709cf3e',
-    genres: ['classic', 'revolution']
-  },
+  // {
+  //   title: 'The Demon ',
+  //   published: 1872,
+  //   author: 'Fyodor Dostoevsky',
+  //   id: 'afa5de04-344d-11e9-a414-719c6709cf3e',
+  //   genres: ['classic', 'revolution']
+  // },
 ]
 
 module.exports = ({ books, authors })

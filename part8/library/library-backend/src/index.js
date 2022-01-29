@@ -1,4 +1,4 @@
-const { ApolloServer, UserInputError, AuthenticationError, gql } = require('apollo-server')
+const { ApolloServer, UserInputError, AuthenticationError } = require('apollo-server')
 require('dotenv').config()
 const mongoose = require('mongoose')
 const Book = require('./models/Book')
@@ -12,6 +12,7 @@ const pubsub = new PubSub()
 
 
 // Initialise MongoDB if empty
+// const { findById, findByIdAndUpdate } = require('./models/Book')
 // const { books, authors } = require('./testData')
 // authors.map(async(author) => {
 //   const newAuthor = new Author(author)
@@ -20,7 +21,8 @@ const pubsub = new PubSub()
 // books.map(async (book) => {
 //   const author = await Author.findOne({ name: book.author })
 //   const newBook = new Book({ ...book, author: author })
-//   await newBook.save()
+//   const savedBook = await newBook.save()
+//   await Author.findByIdAndUpdate({ _id:author._id }, { books: [...author.books, savedBook._id] }, { new: true })
 // })
 
 const MONGODB_URI = process.env.MONGODB_URI
@@ -31,6 +33,7 @@ mongoose.connect(MONGODB_URI)
   .catch((error) => {
     console.log('error connection to MongoDB:', error.message)
   })
+mongoose.set('debug', true)
 
 const resolvers = {
   Query: {
@@ -50,7 +53,7 @@ const resolvers = {
     me: (root, args, context) => context.currentUser
   },
   Author: {
-    bookCount: async (root) => await Book.collection.countDocuments({ author: root._id })
+    bookCount: async (root) => root.books.length
   },
   Book: {
     author: async (root) => await Author.findById(root.author)
@@ -73,7 +76,8 @@ const resolvers = {
       const author = await Author.findOne({ name: args.author })
       const newBook = new Book({ ...args, author: author._id })
       try {
-        await newBook.save()
+        const savedBook = await newBook.save()
+        await Author.findByIdAndUpdate({ _id:author._id }, { books: [...author.books, savedBook._id] }, { new: true })
       } catch (error) {
         throw new UserInputError(error.message, { invalidArgs: args })
       }
@@ -85,7 +89,7 @@ const resolvers = {
         throw new AuthenticationError('not authenticated')
       }
 
-      const author = await Author.findOneAndUpdate({ name: args.name }, { born: args.setBornTo },{ new: true })
+      const author = await Author.findOneAndUpdate({ name: args.name }, { born: args.setBornTo }, { new: true })
       if (!author) {
         throw new UserInputError('author not found', { invalidArgs: args })
       }
