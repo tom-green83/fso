@@ -24,6 +24,7 @@ const App = () => {
     setToken(null)
     localStorage.clear()
     client.resetStore()
+    setPage('authors')
   }
 
   return (
@@ -53,9 +54,12 @@ const App = () => {
         show={page === 'add'}
       />
 
-      <Recommendations
-        show={page === 'recommend'}
-      />
+      {token
+        ? <Recommendations
+          show={page === 'recommend'}
+        />
+        : null
+      }
 
       <LoginForm
         show={page === 'login'} setToken={setToken} setPage={setPage}
