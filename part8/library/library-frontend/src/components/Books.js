@@ -16,7 +16,6 @@ const Books = (props) => {
       return book
     }
   })
-  console.log(books)
 
   if (!props.show) {
     return null
