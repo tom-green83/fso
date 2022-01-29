@@ -1,26 +1,21 @@
-import React, { useEffect, useState } from 'react'
-import { FILTER_BOOKS } from '../queries'
-import { useLazyQuery } from '@apollo/client'
+import React, { useState } from 'react'
+import { ALL_BOOKS } from '../queries'
+import { useQuery } from '@apollo/client'
 
 const Books = (props) => {
-  const [books, setBooks] = useState([])
-  const [getBooks, result] = useLazyQuery(FILTER_BOOKS)
+  const [genre, setGenre] = useState(null)
+  const result = useQuery(ALL_BOOKS)
 
-  const filterBooks = async (genre) => {
-    await getBooks({ variables: { genre: genre } })
+  if (result.loading) {
+    return <div>loading...</div>
   }
-
-  // Update books state if result changes
-  useEffect(() => {
-    if (result.data) {
-      setBooks(result.data.allBooks)
+  const books = result.data.allBooks.filter(book => {
+    if (genre) {
+      return book.genres.includes(genre)
+    } else {
+      return book
     }
-  }, [result])
-
-  // Call filterBooks with null argument to load unfiltered list of books when page is first loaded
-  useEffect(() => {
-    filterBooks(null)
-  }, [])
+  })
 
   if (!props.show) {
     return null
@@ -30,13 +25,13 @@ const Books = (props) => {
     <div>
       <h2>books</h2>
       <div>
-        <button onClick={() => filterBooks('refactoring')}>refactoring</button>
-        <button onClick={() => filterBooks('agile')}>agile</button>
-        <button onClick={() => filterBooks('patterns')}>patterns</button>
-        <button onClick={() => filterBooks('design')}>design</button>
-        <button onClick={() => filterBooks('crime')}>crime</button>
-        <button onClick={() => filterBooks('classic')}>classic</button>
-        <button onClick={() => filterBooks(null)}>all genres</button>
+        <button onClick={() => setGenre('refactoring')}>refactoring</button>
+        <button onClick={() => setGenre('agile')}>agile</button>
+        <button onClick={() => setGenre('patterns')}>patterns</button>
+        <button onClick={() => setGenre('design')}>design</button>
+        <button onClick={() => setGenre('crime')}>crime</button>
+        <button onClick={() => setGenre('classic')}>classic</button>
+        <button onClick={() => setGenre(null)}>all genres</button>
       </div>
       <table>
         <tbody>

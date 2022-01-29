@@ -11,6 +11,7 @@ const Authors = (props) => {
   useEffect(() => {
     if ( result.data ) {
       const token = result.data.login.value
+      console.log(token)
       props.setToken(token)
       localStorage.setItem('library-user-token', token)
     }
