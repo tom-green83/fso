@@ -1,6 +1,6 @@
 import { Diagnosis } from "../src/types";
 
-const diagnoses: Diagnosis = 
+const diagnoses: Diagnosis[] = 
 [
   {
     "code": "M24.2",
