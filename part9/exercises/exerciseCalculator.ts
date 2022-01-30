@@ -6,16 +6,16 @@ interface exerciseCalculatorInput {
 const parseArgumentsExercise = (args: Array<string>): exerciseCalculatorInput => {
   if (args.length < 4) throw new Error('Not enough arguments');
 
-  const numericInput = args.slice(2).map(s => Number(s))
+  const numericInput = args.slice(2).map(s => Number(s));
   numericInput.map(e => {
     if (isNaN(e)) throw new Error('Provided values were not numbers');
-  })
+  });
 
   return {
     exerciseHours: numericInput.slice(1),
     target: numericInput[0]
   };
-}
+};
 
 interface exerciseCalculatorResult {
   periodLength: number;
@@ -27,13 +27,10 @@ interface exerciseCalculatorResult {
   average: number;
 }
 
-const exerciseHours = [3, 0, 2, 4.5, 0, 3, 1];
-const target = 2;
-
 const calculateExercises = (exerciseHours: Array<number>, target: number): exerciseCalculatorResult => {
   const periodLength = exerciseHours.length;
   const trainingDays = exerciseHours.filter(h => h > 0).length;
-  const average = exerciseHours.reduce(function(a, b){return a + b})/periodLength;
+  const average = exerciseHours.reduce(function(a, b){return a + b;})/periodLength;
   const success = (average >= target);
 
   let rating, ratingDescription;
@@ -49,7 +46,7 @@ const calculateExercises = (exerciseHours: Array<number>, target: number): exerc
     ratingDescription,
     target,
     average };
-}
+};
 
 try {
   const { exerciseHours, target } = parseArgumentsExercise(process.argv);
