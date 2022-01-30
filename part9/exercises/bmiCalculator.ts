@@ -6,7 +6,7 @@ interface bmiInput {
 const parseArgumentsBmi = (args: Array<string>): bmiInput => {
   if (args.length < 4) throw new Error('Not enough arguments');
   if (args.length > 4) throw new Error('Too many arguments');
-
+  
   if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
     return {
       height: Number(args[2]),
@@ -17,7 +17,7 @@ const parseArgumentsBmi = (args: Array<string>): bmiInput => {
   }
 }
 
-const calculateBmi = (height: number, weight: number): string =>  {
+export const calculateBmi = (height: number, weight: number): string =>  {
   const bmi = weight / Math.pow(height/100, 2);
   if (bmi < 18.5) return 'Underweight';
   else if (bmi>= 18.5 && bmi <=24.9) return 'Normal (healthy weight)';
