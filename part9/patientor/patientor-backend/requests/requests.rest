@@ -1,0 +1,11 @@
+### POST request to patients endpoint
+POST http://localhost:3001/api/patients HTTP/1.1
+content-type: application/json
+
+{
+      "name": "Person",
+      "dateOfBirth": "2000-01-01",
+      "ssn": "000000-000A",
+      "gender": "male",
+      "occupation": "Human"
+  }
