@@ -1,0 +1,42 @@
+### Get exercises calculation with correctly formatted request
+POST http://localhost:3002/exercises HTTP/1.1
+content-type: application/json
+
+{
+  "daily_exercises": [1, 0, 2, 0, 3, 0, 2.5],
+  "target": 2.5
+}
+
+### Post request with missing exercises
+POST http://localhost:3002/exercises HTTP/1.1
+content-type: application/json
+
+{
+  "target": 2.5
+}
+
+### Post request with missing target
+POST http://localhost:3002/exercises HTTP/1.1
+content-type: application/json
+
+{
+  "daily_exercises": [1, 0, 2, 0, 3, 0, 2.5]
+}
+
+### Post request with string in exercises
+POST http://localhost:3002/exercises HTTP/1.1
+content-type: application/json
+
+{
+  "daily_exercises": [1, 0, 2, 0, 3, 0, "2.5a"],
+  "target": 2.5
+}
+
+### Post request with string in target
+POST http://localhost:3002/exercises HTTP/1.1
+content-type: application/json
+
+{
+  "daily_exercises": [1, 0, 2, 0, 3, 0, 2.5],
+  "target": "2.5a"
+}
