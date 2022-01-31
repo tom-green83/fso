@@ -1,7 +1,6 @@
 import React from "react";
-import { CourseName } from "../types";
 
-const Header = ({ courseName } : CourseName) => {
+const Header = ({ courseName } : {courseName: string}) => {
   return (
     <>
       <h1>{courseName}</h1>
