@@ -23,8 +23,8 @@ const getPatientById = (id: string): Patient => {
   if (patient) {
     return patient;
   } else {
-    throw new Error('Patient not found')
+    throw new Error('Patient not found');
   }
-}
+};
 
 export default { getPatients, getPatientsPublic, addPatient, getPatientById };
