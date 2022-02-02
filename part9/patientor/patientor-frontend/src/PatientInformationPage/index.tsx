@@ -5,7 +5,7 @@ import { Icon } from "semantic-ui-react";
 
 import { apiBaseUrl } from "../constants";
 import { useStateValue, setCurrentPatient } from "../state";
-import { Patient } from "../types";
+import { Patient, Entry } from "../types";
 import { useParams } from "react-router-dom";
 
 const PatientInformationPage = () => {
@@ -36,6 +36,33 @@ const PatientInformationPage = () => {
     }
   };
 
+  const renderEntry = (entry: Entry) => {
+    return (
+      <div key={entry.id}>
+        {entry.date} {entry.description}
+        {renderDiagnosisCodes(entry.diagnosisCodes)}
+      </div>
+    );
+  };
+
+  const renderDiagnosisCodes = (diagnosisCodes: string[]|undefined) => {
+    return (
+      <>
+      {diagnosisCodes && 
+        <ul>
+         {diagnosisCodes.map((code, index) => {
+           return (
+            <li key={index}>
+              {code}
+            </li>
+           );
+         })}
+        </ul>
+        }
+      </>
+    );
+  };
+
   if (!currentPatient) {
     return null;
   }
@@ -46,6 +73,8 @@ const PatientInformationPage = () => {
       </h1>
         <div>ssn: {currentPatient.ssn}</div>
         <div>occupation: {currentPatient.occupation}</div>
+      <h3>entries</h3>
+      {currentPatient.entries.map(entry => renderEntry(entry))}
     </>
   );
 };
