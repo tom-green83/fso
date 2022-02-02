@@ -10,8 +10,8 @@ import { useParams } from "react-router-dom";
 
 const PatientInformationPage = () => {
   const { id } = useParams<{id: string}>();
-  const [ { currentPatient }, dispatch] = useStateValue();
-  
+  const [ { currentPatient, diagnoses }, dispatch] = useStateValue();
+
   React.useEffect(() => {
     if (!currentPatient || currentPatient.id!==id) {
       void axios.get<void>(`${apiBaseUrl}/patients/${id}`);
@@ -39,13 +39,18 @@ const PatientInformationPage = () => {
   const renderEntry = (entry: Entry) => {
     return (
       <div key={entry.id}>
-        {entry.date} {entry.description}
+        {entry.date} <em>{entry.description}</em>
         {renderDiagnosisCodes(entry.diagnosisCodes)}
       </div>
     );
   };
 
   const renderDiagnosisCodes = (diagnosisCodes: string[]|undefined) => {
+    const renderName = (code: string): string|null => {
+      const foundDiagnosis = Object.values(diagnoses).find(diagnosis => diagnosis.code === code);
+      return foundDiagnosis? foundDiagnosis.name: null;
+    };
+    
     return (
       <>
       {diagnosisCodes && 
@@ -53,7 +58,7 @@ const PatientInformationPage = () => {
          {diagnosisCodes.map((code, index) => {
            return (
             <li key={index}>
-              {code}
+              {code} {renderName(code)}
             </li>
            );
          })}
@@ -63,7 +68,7 @@ const PatientInformationPage = () => {
     );
   };
 
-  if (!currentPatient) {
+if (!currentPatient) {
     return null;
   }
   return (
