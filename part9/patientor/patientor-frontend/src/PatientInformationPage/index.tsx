@@ -1,20 +1,49 @@
 import React from "react";
 import axios from "axios";
-import { Icon } from "semantic-ui-react";
+import { Icon, Button } from "semantic-ui-react";
 import EntryDetails from "./EntryDetails";
+import AddEntryModal from "../AddEntryModal/AddEntryModal";
 
 import { apiBaseUrl } from "../constants";
-import { useStateValue, setCurrentPatient } from "../state";
-import { Patient } from "../types";
+import { useStateValue, setCurrentPatient, addPatient } from "../state";
+import { NewEntry, Patient } from "../types";
 import { useParams } from "react-router-dom";
 
 const PatientInformationPage = () => {
   const { id } = useParams<{id: string}>();
   const [ { currentPatient }, dispatch] = useStateValue();
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string | undefined>();
+
+  const openModal = (): void => setModalOpen(true);
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
+  };
+
+  // const submitEntry = (newEntry: NewEntry): void => {
+  //   console.log(newEntry);
+  // };
+
+  const submitEntry = async (values: NewEntry) => {
+    if (!currentPatient) return null;
+    try {
+        const { data: newPatient } = await axios.post<Patient>(
+        `${apiBaseUrl}/patients/${currentPatient.id}/entries`,
+        values
+      );
+      dispatch(addPatient(newPatient));
+      dispatch(setCurrentPatient(newPatient));
+      // closeModal();
+    } catch (e) {
+      console.error(e.response?.data || 'Unknown Error');
+      setError(e.response?.data?.error || 'Unknown error');
+    }
+  };
 
   React.useEffect(() => {
     if (!currentPatient || currentPatient.id!==id) {
-      void axios.get<void>(`${apiBaseUrl}/patients/${id}`);
       const fetchPatient = async() => {
         try {
           const {data: patientFromApi } = await axios.get<Patient>(`${apiBaseUrl}/patients/${id}`);
@@ -44,10 +73,17 @@ if (!currentPatient) {
       <h1>
         {currentPatient.name} <Icon name={genderToIconName(currentPatient.gender)}/>
       </h1>
-        <div>ssn: {currentPatient.ssn}</div>
-        <div>occupation: {currentPatient.occupation}</div>
+      <div>ssn: {currentPatient.ssn}</div>
+      <div>occupation: {currentPatient.occupation}</div>
+      <AddEntryModal
+        modalOpen={modalOpen}
+        error={error}
+        onSubmit={submitEntry}
+        onClose={closeModal}
+      />
+      <Button onClick={() => openModal()}>Add New Entry</Button>
       <h3>entries</h3>
-      {currentPatient.entries.map(entry => <EntryDetails key={entry.id} entry={entry}/>)}
+      {currentPatient.entries && currentPatient.entries.map(entry => <EntryDetails key={entry.id} entry={entry}/>)}
     </>
   );
 };
