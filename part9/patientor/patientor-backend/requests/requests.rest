@@ -8,4 +8,48 @@ content-type: application/json
       "ssn": "000000-000A",
       "gender": "male",
       "occupation": "Human"
-  }
+}
+
+### POST hospital entry to Hans Gruber
+POST http://localhost:3001/api/patients/d27736ec-f723-11e9-8f0b-362b9e155667/entries HTTP/1.1
+content-type: application/json
+
+{
+    "date": "2015-01-02",
+    "type": "Hospital",
+    "specialist": "MD House",
+    "diagnosisCodes": ["S62.5"],
+    "description": "Healing time appr. 2 weeks. patient doesn't remember how he got the injury.",
+    "discharge": {
+        "date": "2015-01-16",
+        "criteria": "Thumb has healed."
+    }
+}
+      
+### POST health check entry to Hans Gruber
+POST http://localhost:3001/api/patients/d27736ec-f723-11e9-8f0b-362b9e155667/entries HTTP/1.1
+content-type: application/json
+
+{
+        "date": "2019-10-20",
+        "specialist": "MD House",
+        "type": "HealthCheck",
+        "description": "Yearly control visit. Cholesterol levels back to normal.",
+        "healthCheckRating": 0
+}
+
+### POST occupational health care entry to Hans Gruber
+POST http://localhost:3001/api/patients/d27736ec-f723-11e9-8f0b-362b9e155667/entries HTTP/1.1
+content-type: application/json
+
+      {
+        "date": "2019-09-10",
+        "specialist": "MD House",
+        "type": "OccupationalHealthcare",
+        "employerName": "FBI",
+        "description": "Prescriptions renewed.",
+        "sickLeave": {
+          "startDate": "2019-08-05",
+          "endDate": "2019-08-28"
+        }
+      }

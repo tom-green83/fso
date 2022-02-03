@@ -28,7 +28,19 @@ router.get('/:id', (req,res) => {
   } catch (error) {
     if (error instanceof Error) {
       res.status(400).send(error.message);
-    }  }
+    }  
+  }
+});
+
+router.post('/:id/entries', (req, res) => {
+  try {
+    const patient = patientService.addEntry(req.params.id, req.body);
+    res.send(patient);
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(400).send(error.message);
+    }  
+  }
 });
 
 export default router;
