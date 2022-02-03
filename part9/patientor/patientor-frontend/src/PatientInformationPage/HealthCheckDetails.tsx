@@ -7,6 +7,8 @@ const HealthCheckDetails: React.FC<{entry: HealthCheckEntry}> = ({ entry }) => {
     switch (rating) {
       case 0: return 'green heart';
       case 1: return 'yellow heart';
+      case 2: return 'orange heart';
+      case 3: return 'red heart';
       default: return '';
     }
   };
