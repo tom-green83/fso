@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Segment } from 'semantic-ui-react';
 import HealthCheckForm from './HealthCheckForm';
 import HospitalForm from './HospitalForm';
-import OccupationalHealthCheckForm from './OccupationalHealth';
+import OccupationalHealthCheckForm from './OccupationalHealthForm';
 import { NewEntry } from '../types';
 
 interface Props {
@@ -22,7 +22,7 @@ interface Props {
       case 'healthcheck':
         return <HealthCheckForm onCancel={onClose} onSubmit={onSubmit}/>;
       case 'occupationalhealth':
-        return <OccupationalHealthCheckForm />;
+        return <OccupationalHealthCheckForm onCancel={onClose} onSubmit={onSubmit}/>;
       default:
         return null;
     }
