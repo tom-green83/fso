@@ -4,6 +4,7 @@ import React from "react";
 import { useStateValue } from "../state";
 import { HospitalEntry } from "../types";
 import { TextField, DiagnosisSelection } from "../AddPatientModal/FormField";
+import { isDate } from '../utils';
 
 interface Props {
   onSubmit: (values: Omit<HospitalEntry, 'id'>)=> void;
@@ -29,22 +30,29 @@ const HospitalForm = ({ onSubmit, onCancel }: Props) => {
         onSubmit={onSubmit}
         validate={values => {
           const requiredError = "Field is required";
-          const errors: { [field: string]: string } = {};
+          const formatError = "Wrong format";
+          // Find a less manual way of defining the error object
+          const errors: { description: string, date: string, specialist: string, discharge: {date: string, criteria: string} } = 
+          { description: '', date: '', specialist: '', discharge: {date: '', criteria: ''}};
           if (!values.description) {
             errors.description = requiredError;
           }
           if (!values.date) {
             errors.date = requiredError;
+          } else if (!isDate(values.date)){
+            errors.date = formatError;
           }
           if (!values.specialist) {
             errors.specialist = requiredError;
           }
           if (!values.discharge.date) {
-            errors.dischargeDate = requiredError;
+            errors.discharge.date = requiredError;
+          } else if (!isDate(values.discharge.date)) {
+            errors.discharge.date = formatError;
           }
           if (!values.discharge.criteria) {
-            errors.dischargeCriteria = requiredError;
-          }
+            errors.discharge.criteria = requiredError;
+          } 
           return errors;
         }}
         >
@@ -59,7 +67,7 @@ const HospitalForm = ({ onSubmit, onCancel }: Props) => {
                 />
                 <Field
                   label="Date"
-                  placeholder="Date"
+                  placeholder="YYYY-MM-DD"
                   name="date"
                   component={TextField}                
                 />
@@ -71,7 +79,7 @@ const HospitalForm = ({ onSubmit, onCancel }: Props) => {
                 />
                 <Field
                   label="Discharge date"
-                  placeholder="Discharge date"
+                  placeholder="YYYY-MM-DD"
                   name="discharge.date"
                   component={TextField}                
                 />
