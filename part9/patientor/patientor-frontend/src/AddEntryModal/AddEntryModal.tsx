@@ -20,7 +20,7 @@ interface Props {
       case 'hospital':
         return <HospitalForm onCancel={onClose} onSubmit={onSubmit}/>;
       case 'healthcheck':
-        return <HealthCheckForm />;
+        return <HealthCheckForm onCancel={onClose} onSubmit={onSubmit}/>;
       case 'occupationalhealth':
         return <OccupationalHealthCheckForm />;
       default:
