@@ -79,13 +79,13 @@ const HospitalForm = ({ onSubmit, onCancel }: Props) => {
                 <Field
                   label="Discharge date"
                   placeholder="YYYY-MM-DD"
-                  name="['discharge.date']"
+                  name="discharge.date"
                   component={TextField}                
                 />
                 <Field
                   label="Discharge criteria"
                   placeholder="Discharge criteria"
-                  name="['discharge.criteria']"
+                  name="discharge.criteria"
                   component={TextField}                
                 />                
                  <DiagnosisSelection
