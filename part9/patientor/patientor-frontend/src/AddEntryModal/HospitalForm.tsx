@@ -31,9 +31,7 @@ const HospitalForm = ({ onSubmit, onCancel }: Props) => {
         validate={values => {
           const requiredError = "Field is required";
           const formatError = "Wrong format";
-          // Find a less manual way of defining the error object
-          const errors: { description: string, date: string, specialist: string, discharge: {date: string, criteria: string} } = 
-          { description: '', date: '', specialist: '', discharge: {date: '', criteria: ''}};
+          const errors: { [field: string]: string } = {};
           if (!values.description) {
             errors.description = requiredError;
           }
@@ -46,13 +44,14 @@ const HospitalForm = ({ onSubmit, onCancel }: Props) => {
             errors.specialist = requiredError;
           }
           if (!values.discharge.date) {
-            errors.discharge.date = requiredError;
+            errors['discharge.date'] = requiredError;
           } else if (!isDate(values.discharge.date)) {
-            errors.discharge.date = formatError;
+            errors['discharge.date'] = formatError;
           }
           if (!values.discharge.criteria) {
-            errors.discharge.criteria = requiredError;
+            errors['discharge.criteria'] = requiredError;
           } 
+          console.log(errors);
           return errors;
         }}
         >
@@ -80,13 +79,13 @@ const HospitalForm = ({ onSubmit, onCancel }: Props) => {
                 <Field
                   label="Discharge date"
                   placeholder="YYYY-MM-DD"
-                  name="discharge.date"
+                  name="['discharge.date']"
                   component={TextField}                
                 />
                 <Field
                   label="Discharge criteria"
                   placeholder="Discharge criteria"
-                  name="discharge.criteria"
+                  name="['discharge.criteria']"
                   component={TextField}                
                 />                
                  <DiagnosisSelection
